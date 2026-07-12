@@ -12,7 +12,7 @@ class DecisionEnum(str, enum.Enum):
     RFA = "request_for_action"
     PENDING = "pending"
 
-class SignatureLog(base):
+class SignatureLog(Base):
     __tablename__ = "status_logs"
     
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
