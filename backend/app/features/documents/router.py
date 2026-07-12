@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFiule, File, Form, 
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.features.auth.dependencies import get_current_user
-from app.features.documents.models import Document, DocumentVersion, DocumentType, AcademicYear, TermEnum
+from app.features.documents.models import Document, DocumentStatus, DocumentVersion, DocumentType, AcademicYear, TermEnum
 from app.features.departments.models import Department
 from app.features.documents.storage import save_document_version
 from app.features.submission_windows.models import SubmissionWindow
@@ -148,3 +148,33 @@ def revise_document(
         "new_revision": new_revision_number,
         "status": doc.status
     }
+
+@router.delete("/{document_id}")
+def soft_delete_document(
+    document_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # 1. Fetch the document
+    doc = db.query(Document).filter(Document.id == document_id).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found.")
+
+    is_owner = (current_user.id == doc.faculty_id)
+    is_dean = (current_user.role == RoleEnum.DEAN)
+
+    if not (is_owner or is_dean):
+        raise HTTPException(status_code=403, detail="You do not have permission to delete this document.")
+    
+    if is_owner and not is_dean:
+        if doc.status not in [DocumentStatus.DRAFT,DocumentStatus.SUBMITTED ,DocumentStatus.REJECTED]:
+            raise HTTPException(
+                status_code=400, 
+                detail="You can only delete your own documents if it is currently moving through the approval process"
+            )
+
+    # 3. Soft delete by setting is_deleted to True
+    doc.is_deleted = True
+    db.commit()
+
+    return {"message": "Document soft-deleted successfully."}

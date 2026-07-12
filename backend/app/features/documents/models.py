@@ -47,6 +47,7 @@ class Document(Base):
 
     term = Column(SQLEnum(TermEnum), nullable=False)
     status = Column(SQLEnum(DocumentStatus), default=DocumentStatus.DRAFT)
+    is_deleted = Column(Boolean, default=False) # this is to indicate if the document is deleted or not
     current_revision = Column(Integer, default=1)
     is_original_copy_signed = Column(Boolean, default=False) # this is to indicate if the original copy of the document is signed or not
 
