@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from jose import jwt, JWTError
 from app.core.database import get_db
 from app.core.config import settings
-from app.features.users_roles.models import User
+from app.features.user_roles.models import User
 
 # This tells FastAPI where the client gets the token (useful for Swagger UI)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/dev-login")

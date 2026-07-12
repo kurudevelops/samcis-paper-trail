@@ -7,7 +7,7 @@ from app.features.user_roles.models import User
 from app.features.documents.models import Document, DocumentStatus
 from app.features.workflow.models import Signature, StatusLog, DecisionEnum
 from app.features.workflow.engine import validate_transition
-from app.features.notifications.service import trigger_workflow_alerts
+from app.features.notifications.services import trigger_workflow_alerts
 
 import uuid
 

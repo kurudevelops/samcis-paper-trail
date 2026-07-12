@@ -2,15 +2,15 @@ from fastapi import FastAPI
 from app.core.database import engine, Base
 
 from app.features.departments.models import Department
-from app.features.users_roles.models import User
+from app.features.user_roles.models import User
 from app.features.documents.models import Document, DocumentVersion, DocumentType, AcademicYear
 from app.features.documents.router import router as documents_router
-from app.features.auth.routes import router as auth_router
-from app.features.workflow.models import Signature, Statuslog
+from app.features.auth.router import router as auth_router
+from app.features.workflow.models import Signature, StatusLog
 from app.features.workflow.router import router as workflow_router
 from app.features.notifications.router import router as notifications_router
-from app.features.submission_windows.models import SubmissionWindow
-from app.feature.submission_windows.router import router as window_router
+from app.features.submission_windows.model import SubmissionWindow
+from app.features.submission_windows.router import router as window_router
 
 Base.metadata.create_all(bind=engine)
 

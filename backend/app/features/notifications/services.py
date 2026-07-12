@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app.features.notifications.models import Notification
 from app.features.documents.models import Document, DocumentStatus
-from app.features.users_roles.models import User, RoleEnum
+from app.features.user_roles.models import User, RoleEnum
 import uuid
 
 def send_notification(db: Session, target_user_id: str, document_id: str, message: str):

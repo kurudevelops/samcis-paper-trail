@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.security import create_access_token
-from app.features.users_roles.models import User, RoleEnum
+from app.features.user_roles.models import User, RoleEnum
 from app.features.departments.models import Department
 import uuid
 

@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.features.auth.dependencies import get_current_user
-from app.features.users_roles.models import User, RoleEnum
-from app.features.submission_windows.models import SubmissionWindow
+from app.features.user_roles.models import User, RoleEnum
+from app.features.submission_windows.model import SubmissionWindow
 from app.features.documents.models import TermEnum
 from pydantic import BaseModel
 from datetime import datetime
