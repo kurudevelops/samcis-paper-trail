@@ -1,3 +1,4 @@
+from annotated_types import doc
 from fastapi import APIRouter, Depends, UploadFiule, File, Form, HTTPSException, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
@@ -58,4 +59,68 @@ def upload_syllabus(
         "message": "Syllabus uploaded successfully",
         "document_code": doc_code,
         "status": new_doc.status,
+    }
+
+
+@router.post("/{document_id}/revise")
+def revise_document(
+    document_id: str,
+    file: UploadFile = File(...),
+    change_note: str = Form(None),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # 1. Enforce Role: Only Faculty can revise
+    if current_user.role != RoleEnum.FACULTY:
+        raise HTTPException(status_code=403, detail="Only Faculty can revise documents.")
+
+    # 2. Fetch the existing document and verify ownership
+    doc = db.query(Document).filter(Document.id == document_id).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found.")
+        
+    if doc.faculty_id != current_user.id:
+        raise HTTPException(status_code=403, detail="You can only revise your own documents.")
+
+    # Prevent direct revision if already fully approved
+    if doc.status == DocumentStatus.DEAN_APPROVED:
+        raise HTTPException(
+            status_code=400, 
+            detail="Cannot revise a fully approved document directly. An amendment request is required."
+        )
+
+    # 3. Get Department to construct the exact file path
+    dept = db.query(Department).filter(Department.id == doc.department_id).first()
+
+    # 4. Increment the revision number
+    new_revision_number = doc.current_revision + 1
+
+    # 5. Save the new file to local disk (e.g., SYL-CIS-001-R2.pdf)
+    file_path = save_document_version(file, dept.code, doc.document_code, new_revision_number)
+
+    # 6. Log the new version in the database
+    new_version = DocumentVersion(
+        id=str(uuid.uuid4()),
+        document_id=doc.id,
+        revision_number=new_revision_number,
+        file_path=file_path,
+        uploaded_by=current_user.id,
+        change_note=change_note
+    )
+    db.add(new_version)
+
+    # 7. Update the main Document record
+    doc.current_revision = new_revision_number
+    
+    # 8. Workflow Integration: If it was fully rejected, restart the chain
+    if doc.status == DocumentStatus.REJECTED:
+        doc.status = DocumentStatus.SUBMITTED
+
+    db.commit()
+
+    return {
+        "message": "Revision uploaded successfully!", 
+        "document_code": doc.document_code, 
+        "new_revision": new_revision_number,
+        "status": doc.status
     }

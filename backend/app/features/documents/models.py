@@ -16,6 +16,7 @@ class DocumentStatus(str,enum.Enum):
     DEPT_HEAD_SIGNED = "Department_Head_Signed"
     AUDITED = "Audited"
     LIBRARY_SIGNED = "Library_Signed"
+    ASSOC_DEAN_SIGNED = "Assoc_Dean_Signed"
     DEAN_APPROVED = "Dean_Approved"
     REJECTED = "Rejected"
 
