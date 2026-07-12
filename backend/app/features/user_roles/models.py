@@ -6,8 +6,8 @@ import enum
 class RoleEnum(str, enum.Enum):
     FACULTY = "faculty"
     DEPARTMENT_HEAD = "department_head"
-    Secretary = "secretary/auditor"
-    Librarian = "librarian"
+    SECRETARY = "secretary/auditor"
+    LIBRARIAN = "librarian"
     ASSOCIATE_DEAN = "associate_dean"
     DEAN = "dean"
     ADMINISTRATOR = "administrator"
