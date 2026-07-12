@@ -1,7 +1,7 @@
-from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, enum as SQLEnum
+from sqlalchemy import Column, DateTime, String, Integer, Boolean, ForeignKey, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 from app.core.database import Base
-from datatime import datatime
+from datetime import datetime
 import uuid
 import enum
 
@@ -50,7 +50,7 @@ class Document(Base):
     current_revision = Column(Integer, default=1)
     is_original_copy_signed = Column(Boolean, default=False) # this is to indicate if the original copy of the document is signed or not
 
-    created_at = Column(datime, default=datime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 
 class DocumentVersion(Base):
@@ -60,6 +60,6 @@ class DocumentVersion(Base):
     revision_number = Column(Integer, nullable=False)
     file_path = Column(String, nullable=False) # this is the path to the file in the storage
     uploaded_by = Column(String, ForeignKey("users.id")) # this is the user id of the faculty who uploaded the document
-    uploaded_at = Column(datime, default=datime.utcnow)
+    uploaded_at = Column(DateTime, default=datetime.utcnow)
 
     

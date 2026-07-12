@@ -1,11 +1,15 @@
 from annotated_types import doc
-from fastapi import APIRouter, Depends, UploadFiule, File, Form, HTTPSException, status
+from fastapi import APIRouter, Depends, HTTPException, UploadFiule, File, Form, HTTPSException, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.features.auth.dependencies import get_current_user
 from app.features.documents.models import Document, DocumentVersion, DocumentType, AcademicYear, TermEnum
 from app.features.departments.models import Department
 from app.features.documents.storage import save_document_version
+from app.features.submission_windows.models import SubmissionWindow
+from datetime import datetime
+
+
 import uuid
 
 router = APIRouter()
@@ -18,7 +22,8 @@ def upload_syllabus(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
-    if current_user.role != roleEnum.FACULTY:
+    
+    if current_user.role != RoleEnum.FACULTY:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only faculty can upload documents.")
     
     dept = db.query(Department).filter(Department.id == current_user.department_id).first()
@@ -31,6 +36,25 @@ def upload_syllabus(
             detail="System configuration missing: Ensure an active acaddemic year and SYL document type exist"
             )
     
+    window = db.query(SubmissionWindow).filter(
+        SubmissionWindow.academic_year == ay.label,
+        SubmissionWindow.term == term,
+        SubmissionWindow.is_active == True
+    ).first()
+
+    if not window:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No active submission window found for the specified academic year and term."
+        )
+
+    now = datetime.utcnow()
+    if not (window.start_date <= now <= window.end_date):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"The submission window for {ay.label} {term.value} is not currently open. Please submit between {window.start_date} and {window.end_date}."
+        )
+
     count = db.query(Document).filter(
         Document.department_id == dept.id,
         Document.academic_year_id == ay.id,
