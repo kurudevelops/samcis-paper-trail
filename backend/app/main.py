@@ -3,7 +3,7 @@ from app.core.database import engine, Base
 
 from app.features.departments.models import Department
 from app.features.users_roles.models import User
-
+from app.features.documents.models import Document, DocumentVersion, DocumentType, AcademicYear
 
 from app.features.auth.routes import router as auth_router
 
