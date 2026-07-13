@@ -1,7 +1,7 @@
 function QualityRecords() {
     return (
         <div className="content quality-records">
-            <h1>Objectives & Targets Monitoring (QOM)</h1>
+            <h1>Quality Records</h1>
         </div>
     );
 }

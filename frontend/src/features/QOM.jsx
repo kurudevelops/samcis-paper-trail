@@ -1,7 +1,7 @@
 function QOM() {
     return (
         <div className="content qom">
-            <h1>QOM</h1>
+            <h1>Objectives & Targets Monitoring (QOM)</h1>
         </div>
     );
 }
