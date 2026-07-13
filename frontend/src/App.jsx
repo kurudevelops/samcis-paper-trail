@@ -1,7 +1,13 @@
+import Sidebar from './features/Sidebar';
+import { Outlet } from 'react-router-dom';
+
 function App() {
   return (
-    <h1>React Frontend WIP</h1>
-  )
+    <div className='home'>
+      <Sidebar />
+      <Outlet />
+    </div>
+  );
 }
 
-export default App
+export default App;
