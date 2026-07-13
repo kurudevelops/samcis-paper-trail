@@ -11,13 +11,36 @@ function Dashboard() {
     const [requestCount, setRequestCount] = useState(0);
     const [documentCount, setDocumentCount] = useState(0);
 
+    const [formW, setFormW] = useState('');
+    const [guidelinesW, setGuidelinesW] = useState('');
+    const [procedureManualW, setProcedureManualW] = useState('');
+    const [workInstructionW, setWorkInstructionW] = useState('');
+    const [internalDocumentW, setInternalDocumentW] = useState('');
+    const [externalDocumentW, setExternalDocumentW] = useState('');
+
 
     // TODO: fetch actual values from DB
     // temporary placeholder values
     useEffect(() => {
+        // user information
         setName('Conrado Chan');
         setUnit('SMI');
-        setCluster('Academic');        
+        setCluster('Academic');
+
+        // database object counts
+        setRfaCount(5);
+        setPendingCount(1);
+        setRequestCount(121);
+        setDocumentCount(106);
+        
+        // TODO: add numeric labels along x-axis
+        // bar chart
+        setFormW('70%');
+        setGuidelinesW('7%');
+        setProcedureManualW('10%');
+        setWorkInstructionW('3%');
+        setInternalDocumentW('5%');
+        setExternalDocumentW('5%');
     }, []);    
 
     return (
@@ -48,8 +71,39 @@ function Dashboard() {
                     <div className='count'>{documentCount}</div>
                     <div>SMI</div>
                 </div>                
-            </div>
-        </div>
+            </div>   
+         
+            <dl className='bar-chart'>
+                <dt>Documents</dt>
+                <dd className="percentage">
+                    <span className="text"> Form   </span>
+                    <div className='bar' style={{width: formW}}></div>
+                </dd>
+                <dd className="percentage">
+                    <span className="text"> Guidelines  </span>
+                    <div className='bar' style={{width: guidelinesW}}></div>
+                </dd>
+                <dd className="percentage">
+                    <span className="text"> Procedure Manual  </span>
+                    <div className='bar' style={{width: procedureManualW}}></div>
+                </dd>
+                <dd className="percentage">
+                    <span className="text"> Work Instruction  </span>
+                    <div className='bar' style={{width: workInstructionW}}></div>
+                </dd>
+                <dd className="percentage">
+                    <span className="text"> Internal Documents  </span>
+                    <div className='bar' style={{width: internalDocumentW}}></div>
+                </dd>
+                <dd className="percentage">
+                    <span className="text"> External Documents  </span>
+                    <div className='bar' style={{width: externalDocumentW}}></div>
+                </dd>
+            </dl>
+            <style>
+            
+            </style>
+        </div>        
     )
 }
 
