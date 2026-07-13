@@ -16,11 +16,11 @@ body, html, div#root, div.home {
   background-size: 7px 7px;
   background-image: repeating-linear-gradient(-45deg, lightgray 0, hsl(from gainsboro h s 80) 1px, gainsboro 0, gainsboro 50%);
 }
-.sign-in img.paper-trail-logo {
+.login img.paper-trail-logo {
   width: 150px;
   height: auto;
 }
-.sign-in {
+.login {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,19 +32,19 @@ body, html, div#root, div.home {
   width: 100vw;
   height: 100vh;
 }
-.sign-in h1 {
+.login h1 {
   color: var(--primary-dark-blue);
   margin: 0px;
 }
-.sign-in button {
+.login button {
   width: 75%;
   font-weight: bold;
 }
-.sign-in .slu-logo {
+.login .slu-logo {
   width: 50px;
   height: auto;
 }
-.sign-in-box {
+.login-box {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -95,7 +95,7 @@ button.with-icon {
 .circular {
   border-radius: 50%;
 }
-.sign-in .or-divider {
+.login .or-divider {
   width: 70%;
   display: flex;  
   align-items: center;
@@ -106,4 +106,72 @@ button.with-icon {
   flex: 1;
   height: 1px;
   background-color: gray;
+}
+
+.home {
+  display: flex;
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  height: 100%;
+  width: 360px;
+  box-sizing: border-box;
+
+  background-color: var(--primary-dark-blue);
+}
+.sidebar-btn {
+  align-self: flex-end;
+  width: fit-content;
+  height: 40px;
+  padding: 0px;
+  margin: 10px 15px;
+}
+.sidebar-btn > img {
+  width: 40px;
+}
+.sidebar img.paper-trail-logo {
+  width: 190px;
+  height: auto;
+  align-self: center;
+}
+.sidebar ul {
+  padding: 0px;
+}
+.sidebar li {
+  list-style: none;
+}
+.sidebar a {
+  color: white;
+  text-decoration: none; 
+  display: block;
+  width: 100%;
+  padding: 10px 30px;  
+  box-sizing: border-box;
+}
+.sidebar a:hover {
+  text-decoration: underline;
+  background-color: hsl(from var(--primary-dark-blue) h s 17);
+}
+.sidebar li {
+  border-top: solid hsl(from var(--primary-dark-blue) h 50 33) 1px;
+}
+.sidebar li:last-of-type {
+  border: solid hsl(from var(--primary-dark-blue) h 50 33);
+  border-width: 1px 0px; 
+}
+
+div.content {
+  margin: 50px 30px 0px;
+  background-color: white;
+  border-radius: 20px;
+  width: 100%;
+  height: fit-content;
+  min-height: 400px;
+}
+div.content > * {
+  margin-left: 30px;
+  margin-right: 30px;
 }

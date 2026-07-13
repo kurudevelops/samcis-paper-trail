@@ -1,9 +1,13 @@
-import SignIn from "./features/SignIn"
+import Sidebar from './features/Sidebar';
+import { Outlet } from 'react-router-dom';
 
 function App() {
   return (
-    <SignIn />
-  )
+    <div className='home'>
+      <Sidebar />
+      <Outlet />
+    </div>
+  );
 }
 
-export default App
+export default App;
