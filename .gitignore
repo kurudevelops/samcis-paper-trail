@@ -1,7 +1,4 @@
 /.vscode/
 /backend/.venv/
 __pycache__/
-# Agent and IDE files
-.agents/
-.gemini/
 node_modules/
