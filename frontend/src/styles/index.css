@@ -1,10 +1,19 @@
 :root {
   --primary-blue: #16549C;
   --primary-dark-blue: #073066;
+  --secondary-cicm-blue: #0055d9;
+  --secondary-vermilion: #e02f1f;
+  --secondary-green: #01882a;
   --bg-offwhite: #f0ece3;
   --accent-gold: #febe31;
 
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.bold {
+  font-weight: bold;
+}
+.blue {
+  color: var(--secondary-cicm-blue);
 }
 body, html, div#root, div.home {
   margin: 0px;
@@ -108,7 +117,7 @@ button.with-icon {
   background-color: gray;
 }
 
-.home {
+div.home {
   display: flex;
 }
 .sidebar {
@@ -169,10 +178,70 @@ div.content {
   background-color: white;
   border-radius: 20px;
   width: 100%;
+  min-width: 500px;
   height: fit-content;
-  min-height: 400px;
 }
 div.content > * {
   margin-left: 30px;
   margin-right: 30px;
 }
+
+.dashboard .object-counts-container {
+  display: flex;
+  gap: 10px;  
+  flex: 1;
+
+  height: 300px;
+}
+.dashboard .object-counts-container h3 {
+  display: flex;
+  gap: 10px;
+
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  text-align: center;
+}
+.dashboard .object-counts-container > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+
+  height: 210px;
+  border: solid lightgray 1px;
+  border-radius: 10px;  
+}
+.dashboard .object-counts-container .count {
+  margin-top: auto;
+  font-size: 3rem;
+}
+.dashboard .object-counts-container div > div:last-of-type {
+  margin-bottom: 40px;
+  text-align: center;
+}
+.dashboard .object-counts-container .rfa-count {
+  border-bottom: var(--secondary-vermilion) solid 5px;
+}
+.dashboard .object-counts-container .rfa-count > .count {
+  color: var(--secondary-vermilion);
+}
+.dashboard .object-counts-container .pending-count {
+  border-bottom: var(--accent-gold) solid 5px;
+}
+.dashboard .object-counts-container .pending-count > .count {
+  color: var(--accent-gold);
+}
+.dashboard .object-counts-container .request-count {
+  border-bottom: var(--secondary-cicm-blue) solid 5px;
+}
+.dashboard .object-counts-container .request-count > .count {
+  color: var(--secondary-cicm-blue);
+}
+.dashboard .object-counts-container .documents-count {
+  border-bottom: var(--secondary-green) solid 5px;
+}
+.dashboard .object-counts-container .documents-count > .count {
+  color: var(--secondary-green);
+}
+
+
