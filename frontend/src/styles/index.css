@@ -7,6 +7,8 @@
   --secondary-cyan: #0c9b92;
   --fg-gray: #334247;
   --bg-offwhite: #f0ece3;
+  --bg-light-blue: #d3e5f5;
+  --bg-lighter-blue: #edf5fb;
   --accent-gold: #febe31;
 
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -24,9 +26,7 @@ body, html, div#root, div.home {
   background-color: gainsboro;
   color: var(--fg-gray);
 
-  /* Diagonals */
-  background-size: 7px 7px;
-  background-image: repeating-linear-gradient(-45deg, lightgray 0, hsl(from gainsboro h s 80) 1px, gainsboro 0, gainsboro 50%);
+  background-color: var(--bg-light-blue);
 }
 div.home {
   min-height: 100vh;
@@ -133,7 +133,7 @@ div.home {
   gap: 20px;
   flex-shrink: 0;
 
-  width: 360px;
+  width: 315px;
   box-sizing: border-box;
   overflow: scroll;
 
@@ -182,10 +182,12 @@ div.home {
 
 div.content {
   margin: 50px 30px 0px;
-  background-color: white;
+  background-color: #edf5fb;
   border-radius: 20px;
+  border: hsl(from var(--bg-light-blue) h s 80) solid 1px;
   width: 100%;
   min-width: 500px;
+  max-width: 1600px;
   height: fit-content;
   min-height: 500px;
   padding-bottom: 60px;
@@ -202,16 +204,20 @@ div.content > * {
   display: flex;
   gap: 10px;  
   flex: 1;
-
-  height: 300px;
+  
+  height: 310px;
 }
 .dashboard .object-counts-container h3 {
-  display: flex;
   gap: 10px;
-  margin: 10px 5px;
+  padding-top: 21px;
+  font-size: 1.1rem;
+  letter-spacing: -0.08rem;
+  line-height: 1.3rem;
+  border-bottom: lightgray 1px solid;
+  box-sizing: border-box;
+  width: 100%;
 
   text-transform: uppercase;
-  font-size: 1.1rem;
   text-align: center;
 }
 .dashboard .object-counts-container > div {
@@ -220,18 +226,27 @@ div.content > * {
   align-items: center;
   flex: 1;
 
+  max-width: 370px;
   height: 210px;
   border: solid lightgray 1px;
   border-radius: 10px;  
+  background-color: white;
+}
+.dashboard .object-counts-container > div > * {
+  flex: 1;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.dashboard .object-counts-container > div > div:last-child {
+  flex: 1;
+  line-height: 1.2rem;
+  text-align: center;
+  padding-bottom: 12px;
 }
 .dashboard .object-counts-container .count {
   font-weight: 700;
   margin-top: auto;
   font-size: 3rem;
-}
-.dashboard .object-counts-container div > div:last-of-type {
-  margin-bottom: 40px;
-  text-align: center;
 }
 .dashboard .object-counts-container .rfa-count {
   border-bottom: var(--secondary-vermilion) solid 5px;
@@ -261,16 +276,24 @@ div.content > * {
 .charts {
   display: flex;
   flex-wrap: wrap;
+  column-gap: 40px;
   row-gap: 50px;
 }
-dl {
+.bar-chart-container {
+  border: solid lightgray 1px;
+  background-color: white; 
+}
+h3.card-header {
+  padding: 25px 0px 20px 25px;
+  border-bottom: solid lightgray 1px;
+}
+dl.bar-chart {
   display: flex;
-  background-color: white;
-  flex-direction: column;
-  width: 100%;
+  flex-direction: column;  
+  width: 600px;
   max-width: 700px;
   position: relative;
-  padding: 0px 20px;
+  padding: 20px 170px 30px 20px;
   margin: 0px;
 }
 dt {
@@ -282,13 +305,12 @@ dt {
   font-size: 1.2em;
   font-weight: 700;
   margin-bottom: 20px;
-  margin-left: 130px;
 }
 .text {
   display: flex;
   align-items: center;
   height: 40px;
-  width: 210px;
+  width: 170px;
   background-color: white;
   position: absolute;
   left: 0;
@@ -299,7 +321,7 @@ dt {
   line-height: 1;
   width: 100%;
   height: 40px;
-  margin-left: 210px;
+  margin-left: 170px;
   background: repeating-linear-gradient(
   to right,
   #ddd,
@@ -319,14 +341,9 @@ dt {
   transition: background-color .3s ease;
   cursor: pointer;
 }
-.bar-chart {
-  position: relative;
-  width: 600px;
-  margin-right: 210px;
-}
 .bar-chart-labels {
   display: flex;
-  margin-left: 210px;
+  margin-left: 170px;
   width: 100%;
 }
 .bar-chart-labels > div {
@@ -335,16 +352,15 @@ dt {
 .pie-chart-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  gap: 15px;
   width: 500px;
-  height: 400px;
-}
-.pie-chart-container h3 {
-  margin-bottom: auto;
+  height: 450px;
+  padding-bottom: 30px;
+  border: solid lightgray 1px;
+  background-color: white;
 }
 .pie-chart-container .pie-chart {
-  margin-bottom: auto;
+  align-self: center;
 }
 .pie-chart-colors {
   display: flex;
@@ -362,20 +378,20 @@ dt {
   display: inline-block;
 }
 .pie-chart-colors div.form{
-  background-color: var(--secondary-cicm-blue);
+  background-color: #0071bc;
 }
 .pie-chart-colors div.guidelines{
-  background-color: var(--secondary-green);
+  background-color: #00a99d;
 }
 .pie-chart-colors div.procedure-manual{
-  background-color: var(--accent-gold);
+  background-color: #37bc00;
 }
 .pie-chart-colors div.work-instruction{
-  background-color: var(--secondary-vermilion);
+  background-color: #eecc16;
 }
 .pie-chart-colors div.internal-documents{
-  background-color: var(--secondary-cyan);
+  background-color: #f7931e;
 }
 .pie-chart-colors div.external-documents{
-  background-color: var(--fg-gray);
+  background-color: #c1272d;
 }

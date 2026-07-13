@@ -77,48 +77,50 @@ function Dashboard() {
             </div>   
          
             <div className="charts">
-                <dl className='bar-chart'>
-                    <dt>Documents</dt>
-                    <dd className="percentage">
-                        <span className="text"> Form   </span>
-                        <div className='bar' style={{width: formW}}></div>
-                    </dd>
-                    <dd className="percentage">
-                        <span className="text"> Guidelines  </span>
-                        <div className='bar' style={{width: guidelinesW}}></div>
-                    </dd>
-                    <dd className="percentage">
-                        <span className="text"> Procedure Manual  </span>
-                        <div className='bar' style={{width: procedureManualW}}></div>
-                    </dd>
-                    <dd className="percentage">
-                        <span className="text"> Work Instruction  </span>
-                        <div className='bar' style={{width: workInstructionW}}></div>
-                    </dd>
-                    <dd className="percentage">
-                        <span className="text"> Internal Documents  </span>
-                        <div className='bar' style={{width: internalDocumentW}}></div>
-                    </dd>
-                    <dd className="percentage">
-                        <span className="text"> External Documents  </span>
-                        <div className='bar' style={{width: externalDocumentW}}></div>
-                    </dd>
-                    <dd className="bar-chart-labels">
-                        {labels.map((label) => {
-                            return (<div>{label}</div>)
-                        })}
-                    </dd>
-                </dl>        
+                <div className='bar-chart-container'>
+                    <h3  className='card-header'>Documents</h3>
+                    <dl className='bar-chart'>                    
+                        <dd className="percentage">
+                            <span className="text"> Form   </span>
+                            <div className='bar' style={{width: formW}}></div>
+                        </dd>
+                        <dd className="percentage">
+                            <span className="text"> Guidelines  </span>
+                            <div className='bar' style={{width: guidelinesW}}></div>
+                        </dd>
+                        <dd className="percentage">
+                            <span className="text"> Procedure Manual  </span>
+                            <div className='bar' style={{width: procedureManualW}}></div>
+                        </dd>
+                        <dd className="percentage">
+                            <span className="text"> Work Instruction  </span>
+                            <div className='bar' style={{width: workInstructionW}}></div>
+                        </dd>
+                        <dd className="percentage">
+                            <span className="text"> Internal Documents  </span>
+                            <div className='bar' style={{width: internalDocumentW}}></div>
+                        </dd>
+                        <dd className="percentage">
+                            <span className="text"> External Documents  </span>
+                            <div className='bar' style={{width: externalDocumentW}}></div>
+                        </dd>
+                        <dd className="bar-chart-labels">
+                            {labels.map((label) => {
+                                return (<div>{label}</div>)
+                            })}
+                        </dd>
+                    </dl>   
+                </div>     
                 <div className='pie-chart-container'>
-                    <h3>SMI Document Control Requests</h3>
+                    <h3 className='card-header'>SMI Document Control Requests</h3>
                     <PieChart
                     data={[
-                        { label: "Form", value: 70, color: "var(--secondary-cicm-blue)" },
-                        { label: "Guidelines", value: 10, color: "var(--secondary-green)" },
-                        { label: "Procedure Manual", value: 5, color: "var(--accent-gold)" },
-                        { label: "Work Instruction", value: 5, color: "var(--secondary-vermilion)" },
-                        { label: "Internal Documents", value: 5, color: "var(--secondary-cyan)" },
-                        { label: "External Documents", value: 5, color: "var(--fg-gray)" },
+                        { label: "Form", value: 70, color: "#0071bc" },
+                        { label: "Guidelines", value: 10, color: "#00a99d" },
+                        { label: "Procedure Manual", value: 5, color: "#37bc00" },
+                        { label: "Work Instruction", value: 5, color: "#eecc16" },
+                        { label: "Internal Documents", value: 5, color: "#f7931e" },
+                        { label: "External Documents", value: 5, color: "#c1272d" },
                     ]}/>
                     <ul className="pie-chart-colors">
                         <li><div className='color form'></div> Form</li>
