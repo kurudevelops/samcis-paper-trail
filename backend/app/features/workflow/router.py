@@ -1,86 +1,90 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-
-from app.features.auth.dependencies import get_current_user
-from app.features.user_roles.models import User
 from app.features.documents.models import Document, DocumentStatus
-from app.features.workflow.models import Signature, StatusLog, DecisionEnum
-from app.features.workflow.engine import validate_transition
-from app.features.notifications.services import trigger_workflow_alerts
+from app.features.workflow.models import StatusLog, Signature, DecisionEnum
+from app.features.user_roles.models import User, RoleEnum
+# Assuming you have an auth dependency to get the current active user
+from app.features.auth.dependencies import get_current_user 
 
-import uuid
+router = APIRouter(prefix="/workflow", tags=["Workflow"])
 
-router = APIRouter()
+# The state engine configurations
+STANDARD_WORKFLOW = {
+    DocumentStatus.DRAFT: DocumentStatus.PENDING_DEPT_HEAD,
+    DocumentStatus.PENDING_DEPT_HEAD: DocumentStatus.PENDING_AUDIT,
+    DocumentStatus.PENDING_AUDIT: DocumentStatus.PENDING_SECRETARY,
+    DocumentStatus.PENDING_SECRETARY: DocumentStatus.PENDING_DEAN,
+    DocumentStatus.PENDING_DEAN: DocumentStatus.PENDING_LIBRARIAN,
+    DocumentStatus.PENDING_LIBRARIAN: DocumentStatus.COMPLETED
+}
 
-@router.post("/{document_id}/review")
-def review_document(
-    document_id: str, 
-    decision: DecisionEnum, 
-    remarks: str = None, 
-    db: Session = Depends(get_db), 
+AFAR_WORKFLOW = {
+    DocumentStatus.DRAFT: DocumentStatus.PENDING_DEPT_HEAD,
+    DocumentStatus.PENDING_DEPT_HEAD: DocumentStatus.PENDING_DEAN,
+    DocumentStatus.PENDING_DEAN: DocumentStatus.COMPLETED
+}
+
+def get_next_status(current_status: DocumentStatus, doc_type_prefix: str) -> DocumentStatus:
+    """Calculates the progressive status based on document classification."""
+    if doc_type_prefix == "AFAR":
+        return AFAR_WORKFLOW.get(current_status)
+    return STANDARD_WORKFLOW.get(current_status)
+
+
+@router.post("/documents/{document_id}/approve")
+def approve_document(
+    document_id: str,
+    remarks: str = None,
+    db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-
-    doc = db.query(Document).filter(Document.id == document_id).first()
-    if not doc:
+    # 1. Fetch the document
+    document = db.query(Document).filter(Document.id == document_id, Document.is_deleted == False).first()
+    if not document:
         raise HTTPException(status_code=404, detail="Document not found")
+        
+    # 2. Extract its type prefix (assuming document.document_type.prefix exists via relationships)
+    # If your model stores the raw prefix directly, adjust this line accordingly.
+    doc_type_prefix = document.document_type.prefix 
     
-    old_status = doc.status
-
-    try:
-        expected_next_status = validate_transition(
-            current_status=old_status, 
-            user_role=current_user.role, 
-            department_id=current_user.department_id, 
-            doc_department_id=doc.department_id
+    # 3. Calculate target status
+    old_status = document.status
+    next_status = get_next_status(old_status, doc_type_prefix)
+    
+    if not next_status:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"No valid forward transition from state: {old_status} for type {doc_type_prefix}"
         )
-    except HTTPException as e:
-        raise e
-
-    if decision == DecisionEnum.APPROVED:
-        doc.status = expected_next_status
-        if doc.status == DocumentStatus.DEAN_APPROVED:
-            doc.is_original_copy_signed = True
-
-
-    elif decision == DecisionEnum.RFA:
-        if not remarks:
-            raise HTTPException(status_code=400, detail="Remarks are required for Request for Action (RFA)")
         
-    elif decision == DecisionEnum.REJECT:
-        if not remarks:
-            raise HTTPException(status_code=400, detail="Remarks are required for rejection")
-        doc.status = DocumentStatus.REJECTED
-
-    new_signature = Signature(
-        id=str(uuid.uuid4()),
-        document_id=doc.id,
-        
-        signer_id=current_user.id,
-        signer_role=current_user.role,
-
-        decision=decision,
-        remarks=remarks
-    )
-
-    db.add(new_signature)
-
-    new_log = StatusLog(
-        id=str(uuid.uuid4()),
-        document_id=doc.id,
+    # 4. Progress the Document State
+    document.status = next_status
+    
+    # 5. Append to the Status Logs (State Machine History)
+    status_log = StatusLog(
+        document_id=document.id,
         from_status=old_status,
-        to_status=doc.status,
+        to_status=next_status,
         changed_by=current_user.id,
         remarks=remarks
     )
-    db.add(new_log)
-
+    db.add(status_log)
+    
+    # 6. Record the logical Signature validation
+    signature = Signature(
+        document_id=document.id,
+        signed_by=current_user.id,
+        role=current_user.role,
+        decision=DecisionEnum.APPROVED
+    )
+    db.add(signature)
+    
+    # 7. Commit atomic transactions
     db.commit()
-
-    trigger_workflow_alerts(db, doc)
+    db.refresh(document)
     
     return {
-        "message": f"Document {decision.value} successfully", 
-        "new_status": doc.status
+        "message": "Document successfully approved and advanced.",
+        "current_status": document.status
     }

@@ -39,6 +39,15 @@ document_types_seed = [
     {"prefix": "QAC", "label": "Accreditation and QA Compliance Report"}
 ]
 
+departments_seed = [
+    {"id": "BAE", "code": "BAE", "name": "Business Administration Entrepreneurship"},
+    {"id": "IT_MMA", "code": "IT & MMA", "name": "IT & MMA"},
+    {"id": "CS_CAD", "code": "CS & CAD", "name": "CS & CAD"},
+    {"id": "ACT", "code": "Accountancy", "name": "Accountancy"},
+    {"id": "HTM", "code": "HTM", "name": "Hotel & Tourclsism Management"},
+    {"id": "MATH", "code": "Math", "name": "Mathematics Department"}
+]
+
 def seed_database():
     """Injects standard document types into the database."""
     print("🌱 Starting database seed...")
