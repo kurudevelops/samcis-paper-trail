@@ -1,13 +1,10 @@
 import AppLayout from "./components/layout/AppLayout";
+import Dashboard from "./features/dashboard/Dashboard"
 
 function App() {
   return (
-    <AppLayout
-      activePath="/dashboard"
-      onNavigate={(path) => console.log("Navigate to:", path)}
-      onLogout={() => console.log("Logout clicked")}
-    >
-      <p className="text-2xl text-center">Main Content Area (Placeholder)</p>
+    <AppLayout activePath="/dashboard">
+      <Dashboard />
     </AppLayout>
   );
 }
