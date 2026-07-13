@@ -1,6 +1,8 @@
+import SignIn from "./features/SignIn"
+
 function App() {
   return (
-    <h1>React Frontend WIP</h1>
+    <SignIn />
   )
 }
 

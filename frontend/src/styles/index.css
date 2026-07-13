@@ -1,0 +1,109 @@
+:root {
+  --primary-blue: #16549C;
+  --primary-dark-blue: #073066;
+  --bg-offwhite: #f0ece3;
+  --accent-gold: #febe31;
+
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+body, html, div#root, div.home {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  background-color: gainsboro;
+
+  /* Diagonals */
+  background-size: 7px 7px;
+  background-image: repeating-linear-gradient(-45deg, lightgray 0, hsl(from gainsboro h s 80) 1px, gainsboro 0, gainsboro 50%);
+}
+.sign-in img.paper-trail-logo {
+  width: 150px;
+  height: auto;
+}
+.sign-in {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-image: url('/images/geometric-blue-bg.png');
+  background-position: center;
+  background-size: cover;
+
+  width: 100vw;
+  height: 100vh;
+}
+.sign-in h1 {
+  color: var(--primary-dark-blue);
+  margin: 0px;
+}
+.sign-in button {
+  width: 75%;
+  font-weight: bold;
+}
+.sign-in .slu-logo {
+  width: 50px;
+  height: auto;
+}
+.sign-in-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+
+  width: 450px;
+  height: 570px;
+
+  background-color: var(--bg-offwhite);
+  border: var(--accent-gold) solid 3px;
+  border-radius: 21px;
+}
+button, input[type="submit"], input[type="reset"] {
+  /* Remove default styling of buttons */
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+button {
+  box-sizing: border-box;
+  padding: 13px 34px;
+  border-radius: 15px;
+}
+.btn-icon {
+  height: 1rem;
+}
+button.outline {
+  background-color: rgba(0,0,0,0);
+  color: var(--primary-blue);
+  border: var(--primary-blue) 2px solid;
+}
+button.oauth {
+  background-color: var(--primary-blue);
+  color: white; 
+  border: var(--primary-dark-blue) solid 1px;
+}
+button.with-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+}
+.circular {
+  border-radius: 50%;
+}
+.sign-in .or-divider {
+  width: 70%;
+  display: flex;  
+  align-items: center;
+  gap: 7px;
+  color: gray;
+}
+.line {
+  flex: 1;
+  height: 1px;
+  background-color: gray;
+}
