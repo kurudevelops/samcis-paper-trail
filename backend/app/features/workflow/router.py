@@ -27,7 +27,7 @@ AFAR_WORKFLOW = {
 
 def get_next_status(current_status: DocumentStatus, doc_type_prefix: str) -> DocumentStatus:
     """Calculates the progressive status based on document classification."""
-    if doc_type_prefix == "AFAR":
+    if doc_type_prefix == "AFR":
         return AFAR_WORKFLOW.get(current_status)
     return STANDARD_WORKFLOW.get(current_status)
 
