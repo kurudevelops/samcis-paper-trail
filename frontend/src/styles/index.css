@@ -294,7 +294,6 @@ dt {
 .bar {
   display: block;
   background-color: var(--secondary-cicm-blue);
-  width: 50px;
   margin-bottom: 10px;
   height: 90%;
   position: relative;
@@ -306,4 +305,12 @@ dt {
 .bar-chart {
   position: relative;
   width: 600px
+}
+.bar-chart-labels {
+  display: flex;
+  margin-left: 210px;
+  width: 100%;
+}
+.bar-chart-labels > div {
+  flex: 1;
 }

@@ -43,6 +43,10 @@ function Dashboard() {
         setExternalDocumentW('5%');
     }, []);    
 
+    const labels = [];
+    for (let i = 0; i <= 90; i += 10) {
+        labels.push(i);
+    }
     return (
         <div className="content dashboard">
             <h1>Dashboard</h1>
@@ -98,6 +102,11 @@ function Dashboard() {
                 <dd className="percentage">
                     <span className="text"> External Documents  </span>
                     <div className='bar' style={{width: externalDocumentW}}></div>
+                </dd>
+                <dd className="bar-chart-labels">
+                    {labels.map((label) => {
+                        return (<div>{label}</div>)
+                    })}
                 </dd>
             </dl>
             <style>
