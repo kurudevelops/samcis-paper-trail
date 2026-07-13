@@ -109,9 +109,6 @@ function Dashboard() {
                     })}
                 </dd>
             </dl>
-            <style>
-            
-            </style>
         </div>        
     )
 }
