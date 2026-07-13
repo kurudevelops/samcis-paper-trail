@@ -11,6 +11,8 @@ from app.features.workflow.router import router as workflow_router
 from app.features.notifications.router import router as notifications_router
 from app.features.submission_windows.model import SubmissionWindow
 from app.features.submission_windows.router import router as window_router
+from app.features.analytics.router import router as analytics_router
+from app.features.calendar.router import router as calendar_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -21,6 +23,8 @@ app.include_router(documents_router, prefix="/api/v1/documents", tags=["Document
 app.include_router(workflow_router, prefix="/api/v1/workflow", tags=["Workflow"])
 app.include_router(notifications_router, prefix="/api/v1/notifications", tags=["Notifications"])
 app.include_router(window_router, prefix="/api/v1/submission-windows", tags=["Submission Windows"])
+app.include_router(analytics_router, prefix="/api/v1/analytics", tags=["Analytics Dashboard"])
+app.include_router(calendar_router, prefix="/api/v1/calendar", tags=["Calendar Integration"])
 
 @app.get("/")
 def read_root():
