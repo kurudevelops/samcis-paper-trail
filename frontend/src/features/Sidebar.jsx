@@ -8,10 +8,13 @@ function Sidebar() {
             <nav>
                 <ul>
                     <li><Link to='/'>Dashboard</Link></li>                
-                    <li><Link to='/documents'>Documents</Link></li>
+                    <li><Link to='/repository'>Repository</Link></li>
                     <li><Link to='/document-control-requests'>Document Control Requests</Link></li>
                     <li><Link to='/calendar'>Calendar</Link></li>
-                    <li><Link to='/user-manual'>User Manual</Link></li>                    
+                    <li><Link to='/quality-records'>Quality Records</Link></li>
+                    <li><Link to='/qom'>Objectives & Targets Monitoring</Link></li>
+                    <li><Link to='/rfa'>Request for Action</Link></li>
+                    <li><Link to='/profile'>Profile</Link></li>                    
                 </ul>
             </nav>
         </div>

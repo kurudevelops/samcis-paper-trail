@@ -119,6 +119,7 @@ button.with-icon {
   height: 100%;
   width: 360px;
   box-sizing: border-box;
+  overflow: scroll;
 
   background-color: var(--primary-dark-blue);
 }
@@ -133,7 +134,7 @@ button.with-icon {
   width: 40px;
 }
 .sidebar img.paper-trail-logo {
-  width: 190px;
+  width: 170px;
   height: auto;
   align-self: center;
 }
