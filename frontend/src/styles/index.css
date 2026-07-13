@@ -22,6 +22,7 @@ body, html, div#root, div.home {
   padding: 0px;
   min-height: 100%;  
   background-color: gainsboro;
+  color: var(--fg-gray);
 
   /* Diagonals */
   background-size: 7px 7px;
