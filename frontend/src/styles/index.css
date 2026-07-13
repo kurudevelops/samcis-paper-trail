@@ -4,6 +4,8 @@
   --secondary-cicm-blue: #0055d9;
   --secondary-vermilion: #e02f1f;
   --secondary-green: #01882a;
+  --secondary-cyan: #0c9b92;
+  --fg-gray: #334247;
   --bg-offwhite: #f0ece3;
   --accent-gold: #febe31;
 
@@ -181,12 +183,17 @@ div.content {
   width: 100%;
   min-width: 500px;
   height: fit-content;
+  min-height: 500px;
+  padding-bottom: 60px;
 }
 div.content > * {
   margin-left: 30px;
   margin-right: 30px;
 }
 
+.dashboard h3 {
+  margin: 0px;
+}
 .dashboard .object-counts-container {
   display: flex;
   gap: 10px;  
@@ -197,6 +204,7 @@ div.content > * {
 .dashboard .object-counts-container h3 {
   display: flex;
   gap: 10px;
+  margin: 10px 5px;
 
   text-transform: uppercase;
   font-size: 1.1rem;
@@ -245,6 +253,12 @@ div.content > * {
 .dashboard .object-counts-container .documents-count > .count {
   color: var(--secondary-green);
 }
+
+.charts {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 50px;
+}
 dl {
   display: flex;
   background-color: white;
@@ -252,9 +266,9 @@ dl {
   width: 100%;
   max-width: 700px;
   position: relative;
-  padding: 20px;
+  padding: 0px 20px;
+  margin: 0px;
 }
-
 dt {
   align-self: flex-start;
   width: 100%;
@@ -266,7 +280,6 @@ dt {
   margin-bottom: 20px;
   margin-left: 130px;
 }
-
 .text {
   display: flex;
   align-items: center;
@@ -304,7 +317,8 @@ dt {
 }
 .bar-chart {
   position: relative;
-  width: 600px
+  width: 600px;
+  margin-right: 210px;
 }
 .bar-chart-labels {
   display: flex;
@@ -313,4 +327,51 @@ dt {
 }
 .bar-chart-labels > div {
   flex: 1;
+}
+.pie-chart-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 400px;
+}
+.pie-chart-container h3 {
+  margin-bottom: auto;
+}
+.pie-chart-container .pie-chart {
+  margin-bottom: auto;
+}
+.pie-chart-colors {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.pie-chart-colors li {
+  list-style: none;
+}
+.pie-chart-colors .color {
+  width: 10px;
+  height: 10px;
+  border: solid 1px var(--fg-gray);
+  display: inline-block;
+}
+.pie-chart-colors div.form{
+  background-color: var(--secondary-cicm-blue);
+}
+.pie-chart-colors div.guidelines{
+  background-color: var(--secondary-green);
+}
+.pie-chart-colors div.procedure-manual{
+  background-color: var(--accent-gold);
+}
+.pie-chart-colors div.work-instruction{
+  background-color: var(--secondary-vermilion);
+}
+.pie-chart-colors div.internal-documents{
+  background-color: var(--secondary-cyan);
+}
+.pie-chart-colors div.external-documents{
+  background-color: var(--fg-gray);
 }

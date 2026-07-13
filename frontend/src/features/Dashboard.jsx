@@ -33,7 +33,6 @@ function Dashboard() {
         setRequestCount(121);
         setDocumentCount(106);
         
-        // TODO: add numeric labels along x-axis
         // bar chart
         setFormW('70%');
         setGuidelinesW('7%');
@@ -77,40 +76,83 @@ function Dashboard() {
                 </div>                
             </div>   
          
-            <dl className='bar-chart'>
-                <dt>Documents</dt>
-                <dd className="percentage">
-                    <span className="text"> Form   </span>
-                    <div className='bar' style={{width: formW}}></div>
-                </dd>
-                <dd className="percentage">
-                    <span className="text"> Guidelines  </span>
-                    <div className='bar' style={{width: guidelinesW}}></div>
-                </dd>
-                <dd className="percentage">
-                    <span className="text"> Procedure Manual  </span>
-                    <div className='bar' style={{width: procedureManualW}}></div>
-                </dd>
-                <dd className="percentage">
-                    <span className="text"> Work Instruction  </span>
-                    <div className='bar' style={{width: workInstructionW}}></div>
-                </dd>
-                <dd className="percentage">
-                    <span className="text"> Internal Documents  </span>
-                    <div className='bar' style={{width: internalDocumentW}}></div>
-                </dd>
-                <dd className="percentage">
-                    <span className="text"> External Documents  </span>
-                    <div className='bar' style={{width: externalDocumentW}}></div>
-                </dd>
-                <dd className="bar-chart-labels">
-                    {labels.map((label) => {
-                        return (<div>{label}</div>)
-                    })}
-                </dd>
-            </dl>
+            <div className="charts">
+                <dl className='bar-chart'>
+                    <dt>Documents</dt>
+                    <dd className="percentage">
+                        <span className="text"> Form   </span>
+                        <div className='bar' style={{width: formW}}></div>
+                    </dd>
+                    <dd className="percentage">
+                        <span className="text"> Guidelines  </span>
+                        <div className='bar' style={{width: guidelinesW}}></div>
+                    </dd>
+                    <dd className="percentage">
+                        <span className="text"> Procedure Manual  </span>
+                        <div className='bar' style={{width: procedureManualW}}></div>
+                    </dd>
+                    <dd className="percentage">
+                        <span className="text"> Work Instruction  </span>
+                        <div className='bar' style={{width: workInstructionW}}></div>
+                    </dd>
+                    <dd className="percentage">
+                        <span className="text"> Internal Documents  </span>
+                        <div className='bar' style={{width: internalDocumentW}}></div>
+                    </dd>
+                    <dd className="percentage">
+                        <span className="text"> External Documents  </span>
+                        <div className='bar' style={{width: externalDocumentW}}></div>
+                    </dd>
+                    <dd className="bar-chart-labels">
+                        {labels.map((label) => {
+                            return (<div>{label}</div>)
+                        })}
+                    </dd>
+                </dl>        
+                <div className='pie-chart-container'>
+                    <h3>SMI Document Control Requests</h3>
+                    <PieChart
+                    data={[
+                        { label: "Form", value: 70, color: "var(--secondary-cicm-blue)" },
+                        { label: "Guidelines", value: 10, color: "var(--secondary-green)" },
+                        { label: "Procedure Manual", value: 5, color: "var(--accent-gold)" },
+                        { label: "Work Instruction", value: 5, color: "var(--secondary-vermilion)" },
+                        { label: "Internal Documents", value: 5, color: "var(--secondary-cyan)" },
+                        { label: "External Documents", value: 5, color: "var(--fg-gray)" },
+                    ]}/>
+                    <ul className="pie-chart-colors">
+                        <li><div className='color form'></div> Form</li>
+                        <li><div className='color guidelines'></div> Guidelines</li>
+                        <li><div className='color procedure-manual'></div> Procedure Manual</li>
+                        <li><div className='color work-instruction'></div> Work Instruction</li>
+                        <li><div className='color internal-documents'></div> Internal Documents</li>
+                        <li><div className='color external-documents'></div> External Documents</li>
+                    </ul>
+                </div>      
+            </div>  
         </div>        
     )
+}
+
+function PieChart({ data }) {
+  const total = data.reduce((sum, d) => sum + d.value, 0);
+
+  let cumulative = 0;
+  const gradientParts = data.map((d) => {
+    const start = (cumulative / total) * 360;
+    cumulative += d.value;
+    const end = (cumulative / total) * 360;
+    return `${d.color} ${start}deg ${end}deg`;
+  });
+
+  const style = {
+    width: 200,
+    height: 200,
+    borderRadius: "50%",
+    background: `conic-gradient(${gradientParts.join(", ")})`,
+  };
+
+  return <div className='pie-chart' style={style} />;
 }
 
 export default Dashboard;
