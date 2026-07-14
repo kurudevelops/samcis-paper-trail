@@ -8,32 +8,18 @@ const navItems = [
     label: "EOMS",
     hasDropdown: true,
     children: [
-      {
-        label: "Controlled Documents",
-        path: "/controlled-documents",
-      },
-      {
-        label: "Planning Documents",
-        path: "/planning-documents",
-      },
+      { label: "Controlled Documents", path: "/controlled-documents" },
+      { label: "Planning Documents", path: "/planning-documents" },
     ],
   },
 
-  {
-    label: "Document Control Requests",
-    path: "/document-control-requests",
-    hasDropdown: true,
-  },
+  { label: "Document Control Requests", path: "/document-control-requests" },
 
   { label: "Calendar", path: "/calendar" },
   { label: "User Manual", path: "/user-manual" },
 ];
 
-export default function Sidebar({
-  activePath = "/dashboard",
-  onNavigate,
-  onLogout,
-}) {
+export default function Sidebar({ activePath, onNavigate, onLogout }) {
   const [openMenu, setOpenMenu] = useState("EOMS");
 
   const toggleMenu = (label) => {
@@ -52,7 +38,6 @@ export default function Sidebar({
       {/* Navigation */}
       <nav className="flex-1 py-4">
         {navItems.map((item) => {
-          // Dropdown Item
           if (item.hasDropdown && item.children) {
             const isOpen = openMenu === item.label;
 
@@ -64,29 +49,21 @@ export default function Sidebar({
                   className="w-full flex items-center justify-between px-5 py-3 text-sm hover:bg-yellow-500 hover:text-black transition-colors"
                 >
                   <span>{item.label}</span>
-
-                  {isOpen ? (
-                    <ChevronDown size={14} />
-                  ) : (
-                    <ChevronRight size={14} />
-                  )}
+                  {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                 </button>
 
                 {isOpen && (
                   <div className="bg-blue-950">
                     {item.children.map((child) => {
                       const isActive = child.path === activePath;
-
                       return (
                         <button
                           key={child.path}
                           type="button"
                           onClick={() => onNavigate?.(child.path)}
-                          className={`w-full flex items-center justify-between px-5 py-3 text-sm transition-colors ${
-                         isActive
-                          ? "bg-blue-800 font-semibold hover:bg-yellow-500 hover:text-black"
-                          : "hover:bg-yellow-500 hover:text-black"
-                        }`}
+                          className={`w-full flex items-center justify-between px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
+                            isActive ? "bg-blue-800 font-semibold" : ""
+                          }`}
                         >
                           {child.label}
                         </button>
@@ -97,6 +74,7 @@ export default function Sidebar({
               </div>
             );
           }
+
           const isActive = item.path === activePath;
 
           return (
@@ -105,11 +83,10 @@ export default function Sidebar({
               type="button"
               onClick={() => onNavigate?.(item.path)}
               className={`w-full flex items-center justify-between px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
-  isActive ? "bg-blue-800 font-semibold" : ""
-}`}
+                isActive ? "bg-blue-800 font-semibold" : ""
+              }`}
             >
               <span>{item.label}</span>
-
               {item.hasDropdown && <ChevronDown size={14} />}
             </button>
           );
