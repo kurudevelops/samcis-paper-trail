@@ -32,7 +32,7 @@ function Dashboard() {
                 return res.json()
             })
             .then((data) => {
-                console.log(data.count);
+                setDocumentCount(data.count);
             });
 
         // user information
@@ -44,7 +44,6 @@ function Dashboard() {
         setRfaCount(5);
         setPendingCount(1);
         setRequestCount(121);
-        setDocumentCount(106);
         
         // bar chart
         setFormW('70%');
