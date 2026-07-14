@@ -21,7 +21,20 @@ function Dashboard() {
 
     // TODO: fetch actual values from DB
     // temporary placeholder values
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
+        fetch('http://localhost:8000/api/v1/documents/document-count')
+            .then((res) => {
+                if (res.status >= 400) {
+                    throw Error('Server error');
+                }
+                return res.json()
+            })
+            .then((data) => {
+                console.log(data.count);
+            });
+
         // user information
         setName('Conrado Chan');
         setUnit('SMI');
