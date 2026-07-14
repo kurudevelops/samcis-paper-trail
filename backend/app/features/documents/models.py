@@ -80,12 +80,3 @@ class DocumentControlRequest(Base):
     decided_by_id = Column(String, ForeignKey("users.id"))
     requested_at = Column(DateTime, default=datetime.utcnow)
     decided_at = Column(DateTime)
-
-class SubmissionWindows(Base):
-    __tablename__ = "submission_windows"
-    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    academic_year = Column(String, nullable=False)
-    term = Column(String, nullable=False)
-    start_date = Column(DateTime, default=datetime.utcnow)
-    end_date = Column(DateTime)
-    is_active = Column(Boolean, default=true)
