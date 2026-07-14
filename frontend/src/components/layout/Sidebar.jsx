@@ -2,19 +2,42 @@ import { useState } from "react";
 import { ChevronDown, ChevronRight, LogOut } from "lucide-react";
 
 const navItems = [
-  { label: "Dashboard", path: "/dashboard" },
+  {
+    label: "Dashboard",
+    path: "/dashboard",
+  },
 
   {
-    label: "EOMS",
-    hasDropdown: true,
-    children: [
+   label: "EOMS",
+   path: "/objectives-and-target-monitoring", // Default EOMS page
+   hasDropdown: true,
+   children: [
       {
+       
         label: "Controlled Documents",
+       
         path: "/controlled-documents",
+     ,
       },
       {
+       
         label: "Planning Documents",
+       
         path: "/planning-documents",
+     ,
+      },
+      {
+        label: "Objectives and Target Monitoring",
+        path: "/objectives-and-target-monitoring",
+      },
+      {
+        label: "Quality Records",
+        path: "/quality-records",
+      },
+      {
+        label: "Request for Action",
+        path: "/request-for-action",
+        hasDropdown: true,
       },
     ],
   },
@@ -25,12 +48,20 @@ const navItems = [
     hasDropdown: true,
   },
 
-  { label: "Calendar", path: "/calendar" },
-  { label: "User Manual", path: "/user-manual" },
+  {
+    label: "Calendar",
+    path: "/calendar",
+  },
+
+  {
+    label: "User Manual",
+    path: "/user-manual",
+    hasDropdown: true,
+  },
 ];
 
 export default function Sidebar({
-  activePath = "/dashboard",
+  activePath,
   onNavigate,
   onLogout,
 }) {
@@ -55,9 +86,34 @@ export default function Sidebar({
           // ==========================
           // Dropdown Menu (EOMS)
           // ==========================
-          if (item.hasDropdown && item.children) {
-            const isOpen = openMenu === item.label;
+if (item.hasDropdown && item.children) {
+  const isOpen = openMenu === item.label;
 
+  // Highlight the parent (EOMS) when any child page is active
+  const isParentActive = item.children.some(
+    (child) => child.path === activePath
+  );
+
+  return (
+    <div key={item.label}>
+      <button
+        type="button"
+        onClick={() => {
+          toggleMenu(item.label);
+          onNavigate?.(item.path);
+        }}
+        className={`w-full flex items-center px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
+          isParentActive ? "bg-blue-800 font-semibold" : ""
+        }`}
+      >
+        <span className="flex-1 text-left">{item.label}</span>
+
+        {isOpen ? (
+          <ChevronDown size={14} />
+        ) : (
+          <ChevronRight size={14} />
+        )}
+      </button>
             return (
               <div key={item.label}>
                 <button
@@ -74,6 +130,37 @@ export default function Sidebar({
                   )}
                 </button>
 
+      {isOpen && (
+        <div className="ml-4 my-1 mr-2 rounded-md bg-blue-950 overflow-hidden">
+          {item.children.map((child) => {
+            const isActive = child.path === activePath;
+
+            return (
+              <button
+                key={child.path}
+                type="button"
+                onClick={() => onNavigate?.(child.path)}
+                className={`w-full flex items-center px-4 py-2 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
+                  isActive
+                    ? "bg-yellow-600 font-semibold text-white"
+                    : "bg-blue-950"
+                }`}
+              >
+                <span className="flex-1 text-left">
+                  {child.label}
+                </span>
+
+                {child.hasDropdown && (
+                  <ChevronDown size={14} />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
                 {isOpen && (
                   <div className="ml-4 my-1 overflow-hidden">
                     {item.children.map((child) => {
@@ -111,9 +198,20 @@ export default function Sidebar({
               type="button"
               onClick={() => onNavigate?.(item.path)}
               className={`w-full flex items-center px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
+                isActive
+                  ? "bg-blue-800 font-semibold"
+                  : ""
+              className={`w-full flex items-center px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
                 isActive ? "bg-blue-800 font-semibold" : ""
               }`}
             >
+              <span className="flex-1 text-left">
+                {item.label}
+              </span>
+
+              {item.hasDropdown && (
+                <ChevronDown size={14} />
+              )}
               <span className="flex-1 text-left">{item.label}</span>
 
               {item.hasDropdown && (

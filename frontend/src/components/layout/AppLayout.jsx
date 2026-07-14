@@ -1,8 +1,7 @@
+import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
-
 export default function AppLayout({
-    children,
   activePath = "/dashboard",
   onNavigate,
   onLogout,
@@ -15,7 +14,7 @@ export default function AppLayout({
         onLogout={onLogout}
       />
       <main className="flex-1 p-6 overflow-y-auto bg-gray-200">
-        {children}
+        <Outlet />
       </main>
     </div>
   );
