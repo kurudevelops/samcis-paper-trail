@@ -1,6 +1,7 @@
 from annotated_types import doc
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 from app.core.database import get_db
 from app.features.auth.dependencies import get_current_user
 from app.features.documents.models import Document, DocumentStatus, DocumentVersion, DocumentType, AcademicYear, TermEnum
@@ -14,6 +15,13 @@ from datetime import datetime
 import uuid
 
 router = APIRouter()
+
+@router.get("/document-count")
+def get_document_count(
+    db: Session = Depends(get_db)
+):
+    count = db.query(Document).count();
+    return { 'count': count };
 
 @router.post("/upload")
 def upload_syllabus(
