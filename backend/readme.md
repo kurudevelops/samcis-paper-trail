@@ -6,6 +6,12 @@ Welcome to the core backend repository for the **SAMCIS Paper Trail** system. Th
 * **Completed:** Phase 1 (Auth), Phase 2 (Workflow), Phase 3 (Submission Windows).
 * **Next Up:** Phase 4 (Document Control Requests & Analytics Dashboards).
 
+## Setup
+1. in backend/, create python virtual environment w/ `python -m venv .venv`
+2. activate the venv w/ `source .venv/bin/activate` (on Windows, run .venv/Scripts/activate)
+3. while .venv is active, install dependencies w/ `pip install -r requirements.txt`
+4. run server w/ `fastapi dev`
+
 ---
 
 ## Tech Stack
