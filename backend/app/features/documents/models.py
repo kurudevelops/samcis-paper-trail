@@ -22,6 +22,11 @@ class DocumentStatus(str, enum.Enum):
     COMPLETED = "Completed"
     RETURNED_FOR_ACTION = "Returned_For_Action"
 
+class DcrStatus(str, enum.Enum):
+    PENDING = "Pending"
+    APPROVED = "Approved"
+    REJECTED = "Rejected"
+
 class DocumentType(Base):
     __tablename__ = "document_types"
     
@@ -65,4 +70,13 @@ class DocumentVersion(Base):
     uploaded_by = Column(String, ForeignKey("users.id")) # this is the user id of the faculty who uploaded the document
     uploaded_at = Column(DateTime, default=datetime.utcnow)
 
-    
+class DocumentControlRequest(Base):
+    __tablename__ = "document_control_requests"
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    document_id = Column(String, ForeignKey("documents.id"))
+    requester_id = Column(String, ForeignKey("users.id"))
+    reason = Column(String, nullable=False)
+    status = Column(SQLEnum(DcrStatus), default=DcrStatus.PENDING)
+    decided_by_id = Column(String, ForeignKey("users.id"))
+    requested_at = Column(DateTime, default=datetime.utcnow)
+    decided_at = Column(DateTime)
