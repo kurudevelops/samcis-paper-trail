@@ -52,7 +52,9 @@ export default function Sidebar({
       {/* Navigation */}
       <nav className="flex-1 py-4">
         {navItems.map((item) => {
-          // Dropdown Item
+          // ==========================
+          // Dropdown Menu (EOMS)
+          // ==========================
           if (item.hasDropdown && item.children) {
             const isOpen = openMenu === item.label;
 
@@ -61,19 +63,19 @@ export default function Sidebar({
                 <button
                   type="button"
                   onClick={() => toggleMenu(item.label)}
-                  className="w-full flex items-center justify-between px-5 py-3 text-sm hover:bg-yellow-500 hover:text-black transition-colors"
+                  className="w-full flex items-center px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black"
                 >
-                  <span>{item.label}</span>
+                  <span className="flex-1 text-left">{item.label}</span>
 
                   {isOpen ? (
-                    <ChevronDown size={14} />
+                    <ChevronDown size={14} className="flex-shrink-0" />
                   ) : (
-                    <ChevronRight size={14} />
+                    <ChevronRight size={14} className="flex-shrink-0" />
                   )}
                 </button>
 
                 {isOpen && (
-                  <div className="bg-blue-950">
+                  <div className="ml-4 my-1 overflow-hidden">
                     {item.children.map((child) => {
                       const isActive = child.path === activePath;
 
@@ -82,11 +84,11 @@ export default function Sidebar({
                           key={child.path}
                           type="button"
                           onClick={() => onNavigate?.(child.path)}
-                          className={`w-full flex items-center justify-between px-5 py-3 text-sm transition-colors ${
-                         isActive
-                          ? "bg-blue-800 font-semibold hover:bg-yellow-500 hover:text-black"
-                          : "hover:bg-yellow-500 hover:text-black"
-                        }`}
+                          className={`w-full px-4 py-2 text-left text-sm transition-colors ${
+                            isActive
+                              ? "bg-yellow-600 text-white font-semibold"
+                              : "hover:bg-yellow-500 hover:text-black"
+                          }`}
                         >
                           {child.label}
                         </button>
@@ -97,6 +99,10 @@ export default function Sidebar({
               </div>
             );
           }
+
+          // ==========================
+          // Normal Navigation Items
+          // ==========================
           const isActive = item.path === activePath;
 
           return (
@@ -104,13 +110,15 @@ export default function Sidebar({
               key={item.path}
               type="button"
               onClick={() => onNavigate?.(item.path)}
-              className={`w-full flex items-center justify-between px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
-  isActive ? "bg-blue-800 font-semibold" : ""
-}`}
+              className={`w-full flex items-center px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
+                isActive ? "bg-blue-800 font-semibold" : ""
+              }`}
             >
-              <span>{item.label}</span>
+              <span className="flex-1 text-left">{item.label}</span>
 
-              {item.hasDropdown && <ChevronDown size={14} />}
+              {item.hasDropdown && (
+                <ChevronDown size={14} className="flex-shrink-0" />
+              )}
             </button>
           );
         })}
@@ -120,7 +128,7 @@ export default function Sidebar({
       <button
         type="button"
         onClick={onLogout}
-        className="flex items-center gap-2 px-5 py-4 text-sm border-t border-blue-800 hover:bg-blue-800/60 transition-colors"
+        className="flex items-center gap-2 px-5 py-4 text-sm border-t border-blue-800 transition-colors hover:bg-yellow-500 hover:text-black"
       >
         <LogOut size={14} />
         Log out
