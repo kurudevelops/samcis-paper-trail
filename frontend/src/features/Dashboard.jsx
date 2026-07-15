@@ -7,8 +7,8 @@ function Dashboard() {
     const [cluster, setCluster] = useState('');
 
     const [rfaCount, setRfaCount] = useState(0);
-    const [pendingCount, setPendingCount] = useState(0);
-    const [requestCount, setRequestCount] = useState(0);
+    const [pendingDcrCount, setPendingDcrCount] = useState(0);
+    const [dcrCount, setDcrCount] = useState(0);
     const [documentCount, setDocumentCount] = useState(0);
 
     const [formW, setFormW] = useState('');
@@ -24,7 +24,7 @@ function Dashboard() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/v1/documents/document-count')
+        fetch('http://localhost:8000/api/v1/documents/dashboard-counts')
             .then((res) => {
                 if (res.status >= 400) {
                     throw Error('Server error');
@@ -32,7 +32,9 @@ function Dashboard() {
                 return res.json()
             })
             .then((data) => {
-                setDocumentCount(data.count);
+                setPendingDcrCount(data.pendingDcrCount);
+                setDcrCount(data.dcrCount);
+                setDocumentCount(data.docCount);
             });
 
         // user information
@@ -42,8 +44,8 @@ function Dashboard() {
 
         // database object counts
         setRfaCount(5);
-        setPendingCount(1);
-        setRequestCount(121);
+        setPendingDcrCount(1);
+        setDcrCount(121);
         
         // bar chart
         setFormW('70%');
@@ -69,16 +71,16 @@ function Dashboard() {
                 <div className='rfa-count'>
                     <h3>Requests for Action</h3>
                     <div className='count'>{rfaCount}</div>
-                    <div>Audit non-conformances</div>
+                    <div>Audit non-conformances (placeholder)</div>
                 </div>
                 <div className='pending-count'>
                     <h3>Pending Document Control Requests</h3>
-                    <div className='count'>{pendingCount}</div>
+                    <div className='count'>{pendingDcrCount}</div>
                     <div>Awaiting document control approval</div>
                 </div>
                 <div className='request-count'>
                     <h3>Document Control Requests</h3>
-                    <div className='count'>{requestCount}</div>
+                    <div className='count'>{dcrCount}</div>
                     <div>SMI</div>
                 </div>
                 <div className='documents-count'>
@@ -118,7 +120,7 @@ function Dashboard() {
                         </dd>
                         <dd className="bar-chart-labels">
                             {labels.map((label) => {
-                                return (<div>{label}</div>)
+                                return (<div key={label}>{label}</div>)
                             })}
                         </dd>
                     </dl>   
