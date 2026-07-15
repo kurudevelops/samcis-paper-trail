@@ -37,6 +37,28 @@ def get_dashboard_counts(
         'statusCounts': status_counts
     };
 
+@router.get("/all-documents")
+def get_documents(
+    db: Session = Depends(get_db)
+):
+    documents = db.query(
+        Document,
+        User.first_name,
+        User.last_name
+    ).join(User, Document.faculty_id == User.id).all()
+    print(documents)
+    print(db.query(Document).all())
+    data = []
+    for doc, fname, lname in documents:
+        data.append({
+            "documentCode": doc.document_code,
+            "uploader": f"{fname} {lname}",
+            "status": doc.status,
+            "currentRevision": doc.current_revision,
+            "createdAt": doc.created_at
+        })
+    return data;
+
 @router.post("/upload")
 def upload_syllabus(
     title: str = Form(...),
