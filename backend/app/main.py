@@ -13,6 +13,7 @@ from app.features.submission_windows.model import SubmissionWindow
 from app.features.submission_windows.router import router as window_router
 from app.features.analytics.router import router as analytics_router
 from app.features.calendar.router import router as calendar_router
+from app.features.document_control.router import router as dcr_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -25,6 +26,7 @@ app.include_router(notifications_router, prefix="/api/v1/notifications", tags=["
 app.include_router(window_router, prefix="/api/v1/submission-windows", tags=["Submission Windows"])
 app.include_router(analytics_router, prefix="/api/v1/analytics", tags=["Analytics Dashboard"])
 app.include_router(calendar_router, prefix="/api/v1/calendar", tags=["Calendar Integration"])
+app.include_router(dcr_router, prefix="/api/v1")
 
 @app.get("/")
 def read_root():
