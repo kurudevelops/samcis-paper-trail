@@ -1,4 +1,4 @@
-function Documents() {
+function DocumentControlRequests() {
     return (
         <div className="content document-control-requests">
             <h1>Document Control Requests</h1>
@@ -6,4 +6,4 @@ function Documents() {
     );
 }
 
-export default Documents;
+export default DocumentControlRequests;
