@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function Dashboard() {    
     const [name, setName] = useState('');
@@ -18,22 +18,33 @@ function Dashboard() {
     const [internalDocumentW, setInternalDocumentW] = useState('');
     const [externalDocumentW, setExternalDocumentW] = useState('');
 
-
-    // TODO: fetch actual values from DB
-    // temporary placeholder values
     useEffect(() => {
-        // user information
+        // User information placeholders (until Auth is wired)
         setName('Conrado Chan');
         setUnit('SMI');
         setCluster('Academic');
 
-        // database object counts
-        setRfaCount(5);
-        setPendingCount(1);
-        setRequestCount(121);
-        setDocumentCount(106);
+        // --- FETCH REAL DATA FROM FASTAPI BACKEND ---
+        const fetchDashboardStats = async () => {
+            try {
+                // 1. Fetch total documents from Analytics Router
+                const statsResponse = await axios.get('http://127.0.0.1:8000/api/v1/analytics/dashboard');
+                setDocumentCount(statsResponse.data.total_documents);
+
+                // 2. Fetch pending requests from Document Control Router
+                const dcrResponse = await axios.get('http://127.0.0.1:8000/api/v1/document-control/pending');
+                setPendingCount(dcrResponse.data.length);
+                setRequestCount(dcrResponse.data.length); // Total DCRs active
+
+            } catch (error) {
+                console.error("Failed to fetch dashboard data", error);
+            }
+        };
+
+        fetchDashboardStats();
         
-        // bar chart
+        // Retaining your hardcoded chart percentages to preserve the UI design 
+        // until we add a "Document Type" group-by query to the backend
         setFormW('70%');
         setGuidelinesW('7%');
         setProcedureManualW('10%');
@@ -46,6 +57,7 @@ function Dashboard() {
     for (let i = 0; i <= 90; i += 10) {
         labels.push(i);
     }
+    
     return (
         <div className="content dashboard">
             <h1>Dashboard</h1>
@@ -105,8 +117,8 @@ function Dashboard() {
                             <div className='bar' style={{width: externalDocumentW}}></div>
                         </dd>
                         <dd className="bar-chart-labels">
-                            {labels.map((label) => {
-                                return (<div>{label}</div>)
+                            {labels.map((label, index) => {
+                                return (<div key={index}>{label}</div>)
                             })}
                         </dd>
                     </dl>   

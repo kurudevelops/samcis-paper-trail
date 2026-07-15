@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, String, Text, DateTime, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Enum, true
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 from app.core.database import Base
@@ -13,7 +13,7 @@ class DcrStatus(str, enum.Enum):
 class DocumentControlRequest(Base):
     __tablename__ = "document_control_requests"
 
-    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index = true)
     document_id = Column(String, ForeignKey("documents.id"), nullable=False)
     requested_by = Column(String, ForeignKey("users.id"), nullable=False)
     
