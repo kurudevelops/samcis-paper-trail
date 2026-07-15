@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from app.core.database import get_db
 from app.features.auth.dependencies import get_current_user
-from app.features.documents.models import Document, DocumentStatus, DocumentVersion, DocumentType, AcademicYear, TermEnum
+from app.features.documents.models import Document, DocumentStatus, DocumentVersion, DocumentType, AcademicYear, TermEnum, DocumentControlRequest
 from app.features.departments.models import Department
 from app.features.documents.storage import save_document_version
 from app.features.submission_windows.model import SubmissionWindow
@@ -16,12 +16,19 @@ import uuid
 
 router = APIRouter()
 
-@router.get("/document-count")
-def get_document_count(
+# Get counts of pending DCRs, total DCRs, and total documents in db
+@router.get("/dashboard-counts")
+def get_dashboard_counts(
     db: Session = Depends(get_db)
 ):
-    count = db.query(Document).count();
-    return { 'count': count };
+    pending_dcr_count = db.query(DocumentControlRequest).filter_by(status="PENDING").count();
+    dcr_count = db.query(DocumentControlRequest).count();
+    document_count = db.query(Document).count();
+    return { 
+        'pendingDcrCount': pending_dcr_count,
+        'dcrCount': dcr_count,
+        'docCount': document_count 
+    };
 
 @router.post("/upload")
 def upload_syllabus(
