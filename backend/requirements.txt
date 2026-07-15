@@ -3,3 +3,4 @@ uvicorn
 sqlalchemy
 python-jose[cryptography]
 pydantic-settings
+python-multipart

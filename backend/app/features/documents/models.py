@@ -10,15 +10,17 @@ class TermEnum(str, enum.Enum):
     MIDTERM = "Midterm"
     Finals = "Finals"
 
-class DocumentStatus(str,enum.Enum):
+class DocumentStatus(str, enum.Enum):
     DRAFT = "Draft"
-    SUBMITTED = "Submitted"
-    DEPT_HEAD_SIGNED = "Department_Head_Signed"
-    AUDITED = "Audited"
-    LIBRARY_SIGNED = "Library_Signed"
-    ASSOC_DEAN_SIGNED = "Assoc_Dean_Signed"
-    DEAN_APPROVED = "Dean_Approved"
-    REJECTED = "Rejected"
+    
+    PENDING_DEPT_HEAD = "Pending_Dept_Head"
+    PENDING_AUDIT = "Pending_Audit"
+    PENDING_SECRETARY = "Pending_Secretary"
+    PENDING_DEAN = "Pending_Dean"
+    PENDING_LIBRARIAN = "Pending_Librarian"
+    
+    COMPLETED = "Completed"
+    RETURNED_FOR_ACTION = "Returned_For_Action"
 
 class DocumentType(Base):
     __tablename__ = "document_types"
