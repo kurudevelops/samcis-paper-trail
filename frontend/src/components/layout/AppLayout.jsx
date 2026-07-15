@@ -1,22 +1,21 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
-export default function AppLayout({
-  activePath = "/dashboard",
-  onNavigate,
-  onLogout,
-}) {
+export default function AppLayout({ onLogout }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <div className="flex min-h-screen">
       <Sidebar
-        activePath={activePath}
-        onNavigate={onNavigate}
+        activePath={location.pathname}
+        onNavigate={(path) => navigate(path)}
         onLogout={onLogout}
       />
+
       <main className="flex-1 p-6 overflow-y-auto bg-gray-200">
         <Outlet />
       </main>
     </div>
   );
 }
-

@@ -8,23 +8,17 @@ const navItems = [
   },
 
   {
-   label: "EOMS",
-   path: "/objectives-and-target-monitoring", // Default EOMS page
-   hasDropdown: true,
-   children: [
+    label: "EOMS",
+    path: "/objectives-and-target-monitoring",
+    hasDropdown: true,
+    children: [
       {
-       
         label: "Controlled Documents",
-       
         path: "/controlled-documents",
-     ,
       },
       {
-       
         label: "Planning Documents",
-       
         path: "/planning-documents",
-     ,
       },
       {
         label: "Objectives and Target Monitoring",
@@ -45,7 +39,6 @@ const navItems = [
   {
     label: "Document Control Requests",
     path: "/document-control-requests",
-    hasDropdown: true,
   },
 
   {
@@ -56,12 +49,11 @@ const navItems = [
   {
     label: "User Manual",
     path: "/user-manual",
-    hasDropdown: true,
   },
 ];
 
 export default function Sidebar({
-  activePath,
+  activePath = "/dashboard",
   onNavigate,
   onLogout,
 }) {
@@ -83,101 +75,64 @@ export default function Sidebar({
       {/* Navigation */}
       <nav className="flex-1 py-4">
         {navItems.map((item) => {
-          // ==========================
+          // =====================================
           // Dropdown Menu (EOMS)
-          // ==========================
-if (item.hasDropdown && item.children) {
-  const isOpen = openMenu === item.label;
+          // =====================================
+          if (item.hasDropdown && item.children) {
+            const isOpen = openMenu === item.label;
 
-  // Highlight the parent (EOMS) when any child page is active
-  const isParentActive = item.children.some(
-    (child) => child.path === activePath
-  );
+            const isParentActive =
+              activePath === item.path ||
+              item.children.some((child) => child.path === activePath);
 
-  return (
-    <div key={item.label}>
-      <button
-        type="button"
-        onClick={() => {
-          toggleMenu(item.label);
-          onNavigate?.(item.path);
-        }}
-        className={`w-full flex items-center px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
-          isParentActive ? "bg-blue-800 font-semibold" : ""
-        }`}
-      >
-        <span className="flex-1 text-left">{item.label}</span>
-
-        {isOpen ? (
-          <ChevronDown size={14} />
-        ) : (
-          <ChevronRight size={14} />
-        )}
-      </button>
             return (
               <div key={item.label}>
                 <button
                   type="button"
-                  onClick={() => toggleMenu(item.label)}
-                  className="w-full flex items-center px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black"
+                  onClick={() => {
+                    toggleMenu(item.label);
+
+                    // Navigate to default EOMS page
+                    if (item.path) {
+                      onNavigate?.(item.path);
+                    }
+                  }}
+                  className={`w-full flex items-center px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
+                    isParentActive ? "bg-blue-800 font-semibold" : ""
+                  }`}
                 >
                   <span className="flex-1 text-left">{item.label}</span>
 
                   {isOpen ? (
-                    <ChevronDown size={14} className="flex-shrink-0" />
+                    <ChevronDown size={14} />
                   ) : (
-                    <ChevronRight size={14} className="flex-shrink-0" />
+                    <ChevronRight size={14} />
                   )}
                 </button>
 
-      {isOpen && (
-        <div className="ml-4 my-1 mr-2 rounded-md bg-blue-950 overflow-hidden">
-          {item.children.map((child) => {
-            const isActive = child.path === activePath;
-
-            return (
-              <button
-                key={child.path}
-                type="button"
-                onClick={() => onNavigate?.(child.path)}
-                className={`w-full flex items-center px-4 py-2 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
-                  isActive
-                    ? "bg-yellow-600 font-semibold text-white"
-                    : "bg-blue-950"
-                }`}
-              >
-                <span className="flex-1 text-left">
-                  {child.label}
-                </span>
-
-                {child.hasDropdown && (
-                  <ChevronDown size={14} />
-                )}
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
                 {isOpen && (
-                  <div className="ml-4 my-1 overflow-hidden">
+                  <div className="ml-4 mr-2 my-1 rounded-md bg-blue-950 overflow-hidden">
                     {item.children.map((child) => {
-                      const isActive = child.path === activePath;
+                      const isActive = activePath === child.path;
 
                       return (
                         <button
                           key={child.path}
                           type="button"
                           onClick={() => onNavigate?.(child.path)}
-                          className={`w-full px-4 py-2 text-left text-sm transition-colors ${
+                          className={`w-full flex items-center px-4 py-2 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
                             isActive
                               ? "bg-yellow-600 text-white font-semibold"
-                              : "hover:bg-yellow-500 hover:text-black"
+                              : "bg-blue-950"
                           }`}
                         >
-                          {child.label}
+                          <span className="flex-1 text-left">
+                            {child.label}
+                          </span>
+
+                          {child.hasDropdown && (
+                            <ChevronDown size={14} />
+                          )}
                         </button>
                       );
                     })}
@@ -187,10 +142,10 @@ if (item.hasDropdown && item.children) {
             );
           }
 
-          // ==========================
+          // =====================================
           // Normal Navigation Items
-          // ==========================
-          const isActive = item.path === activePath;
+          // =====================================
+          const isActive = activePath === item.path;
 
           return (
             <button
@@ -198,24 +153,13 @@ if (item.hasDropdown && item.children) {
               type="button"
               onClick={() => onNavigate?.(item.path)}
               className={`w-full flex items-center px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
-                isActive
-                  ? "bg-blue-800 font-semibold"
-                  : ""
-              className={`w-full flex items-center px-5 py-3 text-sm transition-colors hover:bg-yellow-500 hover:text-black ${
                 isActive ? "bg-blue-800 font-semibold" : ""
               }`}
             >
-              <span className="flex-1 text-left">
-                {item.label}
-              </span>
-
-              {item.hasDropdown && (
-                <ChevronDown size={14} />
-              )}
               <span className="flex-1 text-left">{item.label}</span>
 
               {item.hasDropdown && (
-                <ChevronDown size={14} className="flex-shrink-0" />
+                <ChevronDown size={14} />
               )}
             </button>
           );

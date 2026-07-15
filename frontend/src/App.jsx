@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import AppLayout from "./components/layout/AppLayout";
-
 import Dashboard from "./features/dashboard/Dashboard";
 import DocumentControlRequest from "./features/document-control-requests/DocumentControlRequest";
 
@@ -12,12 +11,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* ==========================================
-            All pages inside AppLayout
-            automatically receive the Sidebar.
-        ========================================== */}
-
         <Route
           element={
             <AppLayout
