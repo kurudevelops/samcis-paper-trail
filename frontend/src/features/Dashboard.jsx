@@ -97,7 +97,7 @@ function Dashboard() {
                     </dl>                       
                 </div>   
                 <div className='pie-chart-container'>
-                    <h3 className='card-header'>SMI Document Control Requests</h3>
+                    <h3 className='card-header'>SMI Document Control Requests (Placeholder Data)</h3>
                     <PieChart
                     data={[
                         { label: "Form", value: 70, color: "#0071bc" },
