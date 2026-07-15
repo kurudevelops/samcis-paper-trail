@@ -11,6 +11,7 @@ Welcome to the core backend repository for the **SAMCIS Paper Trail** system. Th
 2. activate the venv w/ `source .venv/bin/activate` (on Windows, run .venv/Scripts/activate)
 3. while .venv is active, install dependencies w/ `pip install -r requirements.txt`
 4. run server w/ `fastapi dev`
+5. while .venv is active, populate db by running `python seed.py`
 
 ---
 
