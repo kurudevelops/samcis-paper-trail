@@ -11,20 +11,13 @@ function Dashboard() {
     const [dcrCount, setDcrCount] = useState(0);
     const [documentCount, setDocumentCount] = useState(0);
 
-    const [formW, setFormW] = useState('');
-    const [guidelinesW, setGuidelinesW] = useState('');
-    const [procedureManualW, setProcedureManualW] = useState('');
-    const [workInstructionW, setWorkInstructionW] = useState('');
-    const [internalDocumentW, setInternalDocumentW] = useState('');
-    const [externalDocumentW, setExternalDocumentW] = useState('');
+    const [statusCounts, setStatusCounts] = useState({});
 
-
-    // TODO: fetch actual values from DB
-    // temporary placeholder values
+    // TODO: add loading message/visual while fetching data
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/v1/documents/dashboard-counts')
+        fetch('http://localhost:8000/api/v1/documents/dashboard-data')
             .then((res) => {
                 if (res.status >= 400) {
                     throw Error('Server error');
@@ -35,31 +28,20 @@ function Dashboard() {
                 setPendingDcrCount(data.pendingDcrCount);
                 setDcrCount(data.dcrCount);
                 setDocumentCount(data.docCount);
+                setStatusCounts(data.statusCounts);
             });
 
         // user information
         setName('Conrado Chan');
         setUnit('SMI');
         setCluster('Academic');
-
-        // database object counts
-        setRfaCount(5);
-        setPendingDcrCount(1);
-        setDcrCount(121);
-        
-        // bar chart
-        setFormW('70%');
-        setGuidelinesW('7%');
-        setProcedureManualW('10%');
-        setWorkInstructionW('3%');
-        setInternalDocumentW('5%');
-        setExternalDocumentW('5%');
     }, []);    
 
-    const labels = [];
+    const barChartNumberLabels = [];
     for (let i = 0; i <= 90; i += 10) {
-        labels.push(i);
+        barChartNumberLabels.push(i);
     }
+
     return (
         <div className="content dashboard">
             <h1>Dashboard</h1>
@@ -71,7 +53,7 @@ function Dashboard() {
                 <div className='rfa-count'>
                     <h3>Requests for Action</h3>
                     <div className='count'>{rfaCount}</div>
-                    <div>Audit non-conformances (placeholder)</div>
+                    <div>Audit non-conformances</div>
                 </div>
                 <div className='pending-count'>
                     <h3>Pending Document Control Requests</h3>
@@ -92,39 +74,28 @@ function Dashboard() {
          
             <div className="charts">
                 <div className='bar-chart-container'>
-                    <h3  className='card-header'>Documents</h3>
-                    <dl className='bar-chart'>                    
-                        <dd className="percentage">
-                            <span className="text"> Form   </span>
-                            <div className='bar' style={{width: formW}}></div>
-                        </dd>
-                        <dd className="percentage">
-                            <span className="text"> Guidelines  </span>
-                            <div className='bar' style={{width: guidelinesW}}></div>
-                        </dd>
-                        <dd className="percentage">
-                            <span className="text"> Procedure Manual  </span>
-                            <div className='bar' style={{width: procedureManualW}}></div>
-                        </dd>
-                        <dd className="percentage">
-                            <span className="text"> Work Instruction  </span>
-                            <div className='bar' style={{width: workInstructionW}}></div>
-                        </dd>
-                        <dd className="percentage">
-                            <span className="text"> Internal Documents  </span>
-                            <div className='bar' style={{width: internalDocumentW}}></div>
-                        </dd>
-                        <dd className="percentage">
-                            <span className="text"> External Documents  </span>
-                            <div className='bar' style={{width: externalDocumentW}}></div>
-                        </dd>
+                    <h3  className='card-header'>Document Status</h3>
+                    <dl className='bar-chart'>   
+                        {Object.entries(statusCounts).map(([label, count]) => (
+                            <dd className="percentage" key={label}>
+                                <span className="text">{
+                                    // Replace all underscores & convert to title case
+                                    label.replaceAll('_', ' ')
+                                    .toLowerCase()
+                                    .split(' ')
+                                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                    .join(' ')
+                                }</span>
+                                <div className="bar" style={{ width: count }}></div>
+                            </dd>
+                        ))}  
                         <dd className="bar-chart-labels">
-                            {labels.map((label) => {
-                                return (<div key={label}>{label}</div>)
+                            {barChartNumberLabels.map((label) => {
+                                return (<div>{label}</div>)
                             })}
-                        </dd>
-                    </dl>   
-                </div>     
+                        </dd>                     
+                    </dl>                       
+                </div>   
                 <div className='pie-chart-container'>
                     <h3 className='card-header'>SMI Document Control Requests</h3>
                     <PieChart

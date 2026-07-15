@@ -16,18 +16,25 @@ import uuid
 
 router = APIRouter()
 
-# Get counts of pending DCRs, total DCRs, and total documents in db
-@router.get("/dashboard-counts")
+@router.get("/dashboard-data")
 def get_dashboard_counts(
     db: Session = Depends(get_db)
 ):
-    pending_dcr_count = db.query(DocumentControlRequest).filter_by(status="PENDING").count();
-    dcr_count = db.query(DocumentControlRequest).count();
-    document_count = db.query(Document).count();
+    pending_dcr_count = db.query(DocumentControlRequest).filter_by(status="PENDING").count()
+    dcr_count = db.query(DocumentControlRequest).count()
+    document_count = db.query(Document).count()
+
+    statuses = ["DRAFT", "PENDING_DEPT_HEAD", "PENDING_AUDIT", "PENDING_SECRETARY", "PENDING_DEAN", "PENDING_LIBRARIAN", "COMPLETED"]
+    status_counts = {}
+    for status in statuses:
+        count = db.query(Document).filter(Document.status == status).count()
+        status_counts[status] = count;
+
     return { 
         'pendingDcrCount': pending_dcr_count,
         'dcrCount': dcr_count,
-        'docCount': document_count 
+        'docCount': document_count,
+        'statusCounts': status_counts
     };
 
 @router.post("/upload")
