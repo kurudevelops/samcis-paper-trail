@@ -29,6 +29,6 @@ class DocumentControlRequest(Base):
     decided_at = Column(DateTime, nullable=True)
 
     # Relationships
-    # document = relationship("Document", back_populates="control_requests")
+    document = relationship("Document", back_populates="control_requests")
     requester = relationship("User", foreign_keys=[requested_by])
     decider = relationship("User", foreign_keys=[decided_by])
