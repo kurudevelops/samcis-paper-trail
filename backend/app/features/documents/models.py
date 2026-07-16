@@ -8,7 +8,7 @@ import enum
 class TermEnum(str, enum.Enum):
     PRELIM = "Prelim"
     MIDTERM = "Midterm"
-    Finals = "Finals"
+    FINALS = "Finals"
 
 class DocumentStatus(str, enum.Enum):
     DRAFT = "Draft"
