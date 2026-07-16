@@ -10,7 +10,9 @@ function Dashboard() {
     const [pendingCount, setPendingCount] = useState(0);
     const [requestCount, setRequestCount] = useState(0);
     const [documentCount, setDocumentCount] = useState(0);
+    const [documentStatuses, setDocumentStatuses] = useState(null);
 
+    const [statusCounts, setStatusCounts] = useState({});
     const [formW, setFormW] = useState('');
     const [guidelinesW, setGuidelinesW] = useState('');
     const [procedureManualW, setProcedureManualW] = useState('');
@@ -30,6 +32,8 @@ function Dashboard() {
                 // 1. Fetch total documents from Analytics Router
                 const statsResponse = await axios.get('http://127.0.0.1:8000/api/v1/analytics/dashboard');
                 setDocumentCount(statsResponse.data.total_documents);
+                console.log(statsResponse.data.documents_by_status);
+                setDocumentStatuses(statsResponse.data.documents_by_status);
 
                 // 2. Fetch pending requests from Document Control Router
                 const dcrResponse = await axios.get('http://127.0.0.1:8000/api/v1/document-control/pending');
@@ -42,22 +46,13 @@ function Dashboard() {
         };
 
         fetchDashboardStats();
-        
-        // Retaining your hardcoded chart percentages to preserve the UI design 
-        // until we add a "Document Type" group-by query to the backend
-        setFormW('70%');
-        setGuidelinesW('7%');
-        setProcedureManualW('10%');
-        setWorkInstructionW('3%');
-        setInternalDocumentW('5%');
-        setExternalDocumentW('5%');
     }, []);    
 
-    const labels = [];
+    const barChartNumberLabels = [];
     for (let i = 0; i <= 90; i += 10) {
-        labels.push(i);
+        barChartNumberLabels.push(i);
     }
-    
+
     return (
         <div className="content dashboard">
             <h1>Dashboard</h1>
@@ -90,39 +85,28 @@ function Dashboard() {
          
             <div className="charts">
                 <div className='bar-chart-container'>
-                    <h3  className='card-header'>Documents</h3>
-                    <dl className='bar-chart'>                    
-                        <dd className="percentage">
-                            <span className="text"> Form   </span>
-                            <div className='bar' style={{width: formW}}></div>
-                        </dd>
-                        <dd className="percentage">
-                            <span className="text"> Guidelines  </span>
-                            <div className='bar' style={{width: guidelinesW}}></div>
-                        </dd>
-                        <dd className="percentage">
-                            <span className="text"> Procedure Manual  </span>
-                            <div className='bar' style={{width: procedureManualW}}></div>
-                        </dd>
-                        <dd className="percentage">
-                            <span className="text"> Work Instruction  </span>
-                            <div className='bar' style={{width: workInstructionW}}></div>
-                        </dd>
-                        <dd className="percentage">
-                            <span className="text"> Internal Documents  </span>
-                            <div className='bar' style={{width: internalDocumentW}}></div>
-                        </dd>
-                        <dd className="percentage">
-                            <span className="text"> External Documents  </span>
-                            <div className='bar' style={{width: externalDocumentW}}></div>
-                        </dd>
+                    <h3  className='card-header'>Document Status</h3>
+                    <dl className='bar-chart'>   
+                        {documentStatuses && documentStatuses.map((row) => (                            
+                            <dd className="percentage" key={row.status}>
+                                <span className="text">{
+                                    // Replace all underscores & convert to title case
+                                    row.status.replaceAll('_', ' ')
+                                    .toLowerCase()
+                                    .split(' ')
+                                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                    .join(' ')
+                                }</span>
+                                <div className="bar" style={{ width: row.count }}></div>
+                            </dd>
+                        ))}  
                         <dd className="bar-chart-labels">
-                            {labels.map((label, index) => {
-                                return (<div key={index}>{label}</div>)
+                            {barChartNumberLabels.map((label) => {
+                                return (<div>{label}</div>)
                             })}
-                        </dd>
-                    </dl>   
-                </div>     
+                        </dd>                     
+                    </dl>                       
+                </div>                        
                 <div className='pie-chart-container'>
                     <h3 className='card-header'>SMI Document Control Requests</h3>
                     <PieChart
