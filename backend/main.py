@@ -1,9 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 from app.core.database import engine, Base
 
 from app.features.departments.models import Department
