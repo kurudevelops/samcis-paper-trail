@@ -1,6 +1,8 @@
+from starlette.middleware.sessions import SessionMiddleware
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import engine, Base
+from app.core.config import settings
 
 from app.features.departments.models import Department
 from app.features.user_roles.models import User
@@ -22,7 +24,11 @@ app = FastAPI(title="Paper Trail 2.0 API")
 origins = [
     "http://localhost:5173" # Default port for Vite frontend (change/add as needed)
 ]
-
+app.add_middleware(
+    SessionMiddleware, 
+    secret_key=settings.SESSION_SECRET_KEY,
+    same_site="lax"
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
