@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import engine, Base
 
 from app.features.departments.models import Department
@@ -18,6 +19,18 @@ from app.features.document_control.router import router as dcr_router
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Paper Trail 2.0 API")
+
+origins = [
+    "http://localhost:5173" # Default port for Vite frontend (change/add as needed)
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(documents_router, prefix="/api/v1/documents", tags=["Documents"])
