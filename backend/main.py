@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 from app.core.database import engine, Base
 
 from app.features.departments.models import Department
@@ -21,8 +24,9 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Paper Trail 2.0 API")
 
 origins = [
-    "http://localhost:5173" # Vite
+    "http://localhost:5173" # Default port for Vite frontend (change/add as needed)
 ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

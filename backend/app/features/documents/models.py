@@ -8,7 +8,7 @@ import enum
 class TermEnum(str, enum.Enum):
     PRELIM = "Prelim"
     MIDTERM = "Midterm"
-    Finals = "Finals"
+    FINALS = "Finals"
 
 class DocumentStatus(str, enum.Enum):
     DRAFT = "Draft"
@@ -38,7 +38,7 @@ class AcademicYear(Base):
 
 class Document(Base):
     __tablename__ = "documents"
-    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     document_code = Column(String, nullable=False, unique=True) # this is the unique code for the document, like SYL-2023-2024-PRELIM-001
 
     # Foreign keys
@@ -54,6 +54,8 @@ class Document(Base):
     is_original_copy_signed = Column(Boolean, default=False) # this is to indicate if the original copy of the document is signed or not
 
     created_at = Column(DateTime, default=datetime.utcnow)
+
+    control_requests = relationship("DocumentControlRequest", back_populates="document")
 
 
 class DocumentVersion(Base):
