@@ -3,7 +3,8 @@ from app.core.database import SessionLocal, Base, engine
 from app.features.user_roles.models import User
 from app.features.departments.models import Department
 from app.features.user_roles.models import RoleEnum
-from app.features.documents.models import DocumentType, AcademicYear, TermEnum, DocumentStatus, Document, DocumentVersion, DcrStatus, DocumentControlRequest
+from app.features.documents.models import DocumentType, AcademicYear, TermEnum, DocumentStatus, Document, DocumentVersion
+from app.features.document_control.models import DcrStatus, DocumentControlRequest
 from datetime import datetime
 
 # Ensure tables are created just in case
@@ -217,14 +218,14 @@ def add_dcr(db):
     data = [
         {
             "document_id": get_doc_id(db, "SYL-2025-2026-PRELIM-001"),
-            "requester_id": get_usr_id(db, "Conrado", "Chan"),
+            "requested_by": get_usr_id(db, "Conrado", "Chan"),
             "reason": "Deadline extension",
             "status": DcrStatus.PENDING,
             "requested_at": datetime(2026, 7, 12, 14, 30, 0)
         },
         {
             "document_id": get_doc_id(db, "SPM-2025-2026-MIDTERM-001"),
-            "requester_id": get_usr_id(db, "Hector", "Martin"),
+            "requested_by": get_usr_id(db, "Hector", "Martin"),
             "reason": "Amendment of approved document",
             "status": DcrStatus.PENDING,
             "requested_at": datetime(2026, 7, 8, 10, 30, 0)
@@ -234,7 +235,7 @@ def add_dcr(db):
         new_row = DocumentControlRequest(
             id=str(uuid.uuid4()),
             document_id=row["document_id"],
-            requester_id=row["requester_id"],
+            requested_by=row["requested_by"],
             reason=row["reason"],
             status=row["status"],
             requested_at=row["requested_at"]
