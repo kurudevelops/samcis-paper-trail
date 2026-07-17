@@ -1,6 +1,6 @@
 from authlib.integrations.starlette_client import OAuth
 from fastapi import FastAPI, Request, APIRouter, Depends, HTTPException, status
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.core.database import get_db
@@ -63,11 +63,17 @@ async def callback(request: Request, db: Session = Depends(get_db)):
     jwt_token = create_access_token({"sub": str(user.id), "email": user.email})
     response = RedirectResponse(url='http://localhost:5173')
     response.set_cookie(
-        'session_token', jwt_token,
-        httponly=True, secure=False,
-        samesite='lax', max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+        'session_token', jwt_token, path='/', 
+        httponly=True, secure=False, samesite='lax', 
+        max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
     )
 
+    return response
+
+@router.post('/logout')
+async def logout(request: Request):
+    response = JSONResponse({"message": "Logged out"})
+    response.delete_cookie('session_token', path='/', httponly=True, secure=False, samesite='lax')
     return response
 
 @router.post("/dev-login")
