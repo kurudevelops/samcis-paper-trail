@@ -19,6 +19,6 @@ class User(Base):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
-    role = Column(SQLEnum(RoleEnum), nullable=False, default=RoleEnum.FACULTY)
+    role = Column(SQLEnum(RoleEnum), nullable=False)
     department_id = Column(String, ForeignKey("departments.id"))
     google_sub = Column(String, unique=True, index=True) # Google account ID

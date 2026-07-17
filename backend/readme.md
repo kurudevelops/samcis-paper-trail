@@ -8,16 +8,6 @@ Welcome to the core backend repository for the **SAMCIS Paper Trail** system. Th
 
 ---
 
-## Dev Setup
-1. backend/ `python -m venv .venv`
-2. source .venv/bin/activate
-3. pip install -r requirements.txt
-4. python seed.py (make sure sqlite is already installed)
-5. backend/app/core/ create `.env` with the entries from .env.example filled out (ask for the values)
-6. backend/ fastapi dev
-
----
-
 ## Tech Stack
 * **Framework:** [FastAPI](https://fastapi.tiangolo.com/) (Python)
 * **ORM:** [SQLAlchemy](https://www.sqlalchemy.org/)

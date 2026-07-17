@@ -1,27 +1,22 @@
 import os
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from pathlib import Path
+from pydantic_settings import BaseSettings
 
-# TODO: include separate random strings in .env for session and jwt secret keys
-BASE_DIR = Path(__file__).resolve().parent
 class Settings(BaseSettings):
     PROJECT_NAME: str = "samcis-paper-trail"
     PROJECT_VERSION: str = "0.1.0"
     API_V1_STR: str = "/api/v1"
+
+    BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    DATABASE_URL: str = os.getenv("DATABASE_URL", f"sqlite:///{os.path.join(BASE_DIR, 'test.db')}")
     
-    DATABASE_URL: str = f"sqlite:///{BASE_DIR / 'test.db'}"
-    CLIENT_ID: str
-    CLIENT_SECRET: str
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "super-secret-development-key-change-this")
+    ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 60 * 24 * 7))  # 7 days
 
-    SESSION_SECRET_KEY: str = "session-super-secret-development-key-change-this"
-    JWT_SECRET_KEY: str = "jwt-super-secret-development-key-change-this"
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
-    UPLOAD_DIR: str = "./uploads"
+    UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", "./uploads")
 
-    model_config = SettingsConfigDict(
-        env_file=BASE_DIR / ".env", 
-        env_file_encoding="utf-8"
-    )
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
 
 settings = Settings()
