@@ -8,6 +8,8 @@ import DocumentControlRequest from "./features/document-control-requests/Documen
 import ObjectivesMonitoring from "./features/eoms/pages/ObjectivesMonitoring";
 import PlanningDocuments from "./features/eoms/pages/PlanningDocuments";
 
+import UserManual from "./features/user-manual/UserManual";
+
 function App() {
   return (
     <BrowserRouter>
@@ -44,6 +46,11 @@ function App() {
             path="/document-control-requests"
             element={<DocumentControlRequest />}
           />
+          <Route 
+          path="/user-manual" 
+          element={<UserManual />} 
+          />
+
         </Route>
 
         {/* Redirect root to Dashboard */}
