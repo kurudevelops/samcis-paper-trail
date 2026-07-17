@@ -1,10 +1,10 @@
+import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Dashboard (){
-    // Welcome header data    
-    const [fname, setFname] = useState('');
-    const [lname, setLname] = useState('');
+function Dashboard () {
+    // Welcome header data  
+    const [user] = useOutletContext();
     const [unit, setUnit] = useState('');
     const [cluster, setCluster] = useState('');
 
@@ -15,16 +15,14 @@ function Dashboard (){
     const [documentCount, setDocumentCount] = useState(0);
 
     // Bar chart data
-    const [documentStatuses, setDocumentStatuses] = useState(null);
+    const [documentStatuses, setDocumentStatuses] = useState(null);    
 
     useEffect(() => {
         // Placeholders until auth is implemented
-        setFname('Conrado');
-        setLname('Chan');
         setUnit('SMI');
         setCluster('Academic');
 
-        // --- FETCH REAL DATA FROM FASTAPI BACKEND ---
+        // --- FETCH REAL DATA FROM FASTAPI BACKEND ---    
         const fetchDashboardStats = async () => {
             try {
                 // 1. Fetch total documents from Analytics Router
@@ -43,12 +41,13 @@ function Dashboard (){
         };
 
         fetchDashboardStats();
-    }, []);
-
+    }, []);    
     return(
-        <div className ="bg-white rounded-2xl p-6 shadow-sm">
-            <h1 className ="text-2xl text-justify text-gray-800 font-bold">Dashboard</h1>
-            <p className ="text-sm text-gray-500">Welcome Back, {fname} {lname} | Unit: {unit} | Cluster: {cluster}</p>
+        <>
+        {user && <div className ="bg-white rounded-2xl p-6 shadow-sm">
+            <h1 className ="text-2xl text-justify text-gray-800 font-bold">Dashboard</h1>            
+            <p className ="text-sm text-gray-500">Welcome Back, {user.first_name} {user.last_name} | Unit: {unit} | Cluster: {cluster}</p>
+            
 
             <div className="grid grid-cols-4 p-6 gap-4">
                 <div className="bg-gray-100 rounded-lg p-4 flex flex-col items-center text-center">
@@ -68,8 +67,8 @@ function Dashboard (){
                     <div>{documentCount}</div>
                 </div>
             </div>
-        </div>
-
+        </div>}
+        </>
     )
 }
 

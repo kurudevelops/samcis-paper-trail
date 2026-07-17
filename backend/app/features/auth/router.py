@@ -7,6 +7,7 @@ from app.core.database import get_db
 from app.core.security import create_access_token
 from app.features.user_roles.models import User, RoleEnum
 from app.features.departments.models import Department
+from app.features.auth.dependencies import get_current_user
 import uuid
 
 
@@ -20,6 +21,15 @@ oauth.register(
     server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
     client_kwargs={'scope': 'openid email profile'}
 )
+
+@router.get('/me')
+async def get_me(current_user: User = Depends(get_current_user)):
+    return {
+        "id": current_user.id,
+        "email": current_user.email,
+        "first_name": current_user.first_name,
+        "last_name": current_user.last_name,
+    }
 
 @router.get('/login/google')
 async def login(request: Request):
