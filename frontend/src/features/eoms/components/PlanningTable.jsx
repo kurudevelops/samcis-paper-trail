@@ -31,7 +31,7 @@ export default function PlanningTable({ rows = [] }) {
 
             <th className="px-6 py-3 text-left font-semibold border-r border-blue-700">
               <div className="flex items-center gap-1">
-                Title
+                Uploader
                 <ArrowUpDown
                   size={13}
                   className="text-yellow-400"
@@ -64,7 +64,7 @@ export default function PlanningTable({ rows = [] }) {
 
             <th className="px-6 py-3 text-center font-semibold border-r border-blue-700">
               <div className="flex justify-center items-center gap-1">
-                Effectivity
+                Created At
                 <ArrowUpDown
                   size={13}
                   className="text-yellow-400"
@@ -107,7 +107,7 @@ export default function PlanningTable({ rows = [] }) {
             rows.map((row, index) => (
 
               <tr
-                key={row.id}
+                key={row.documentCode}
                 className={`
                   border-b border-gray-300
                   hover:bg-blue-50
@@ -121,19 +121,19 @@ export default function PlanningTable({ rows = [] }) {
                 </td>
 
                 <td className="px-6 py-5">
-                  {row.title}
+                  {row.uploader}
                 </td>
 
                 <td className="px-6 py-5 text-center">
-                  {row.type}
+                  {row.documentType}
                 </td>
 
                 <td className="px-6 py-5 text-center">
-                  {row.revision}
+                  {row.currentRevision}
                 </td>
 
                 <td className="px-6 py-5 text-center">
-                  {row.effectivity}
+                  {row.createdAt}
                 </td>
 
                 {/* ==========================================
