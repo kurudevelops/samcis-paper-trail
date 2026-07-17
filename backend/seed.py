@@ -242,6 +242,41 @@ def add_dcr(db):
         )
         db.add(new_row);
 
+def add_document_versions(db):
+    data = [
+        {
+            "revision_number": 1, 
+            "file_path": "uploads/SYL-2025-2026-PRELIM-001.pdf",
+            "code": "SYL-2025-2026-PRELIM-001"
+        },
+        {
+            "revision_number": 1, 
+            "file_path": "uploads/SPM-2025-2026-MIDTERM-001.pdf",
+            "code": "SPM-2025-2026-MIDTERM-001"
+        },
+        {
+            "revision_number": 1, 
+            "file_path": "uploads/REC-2025-2026-FINALS-001.pdf",
+            "code": "REC-2025-2026-FINALS-001"
+        },
+        {
+            "revision_number": 1, 
+            "file_path": "uploads/ACR-2025-2026-MIDTERM-001.pdf",
+            "code": "ACR-2025-2026-MIDTERM-001"
+        },
+    ]
+    for row in data:
+        doc = db.query(Document).filter_by(document_code=row["code"]).first();
+        new_row = DocumentVersion(
+            id=str(uuid.uuid4()),
+            document_id=doc.id,
+            revision_number=row["revision_number"],
+            file_path=row["file_path"],
+            uploaded_by=doc.faculty_id,
+            uploaded_at=doc.created_at
+        )
+        db.add(new_row)
+
 def seed_data(model, add_data):
     db = SessionLocal()
     try:
@@ -266,6 +301,7 @@ if __name__ == "__main__":
         (DocumentType, add_document_types),
         (AcademicYear, add_academic_years),
         (Document, add_documents),
-        (DocumentControlRequest, add_dcr)
+        (DocumentControlRequest, add_dcr),
+        (DocumentVersion, add_document_versions)
     ]:
         seed_data(model, add_function)
