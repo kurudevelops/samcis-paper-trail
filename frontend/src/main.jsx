@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import axios from 'axios';
 import './index.css';
 
 import App from "./App";
@@ -13,10 +14,20 @@ import PlanningDocuments from "./features/eoms/pages/PlanningDocuments";
 
 import Login from "./features/auth/Login";
 
+const api = axios.create({withCredentials: true});
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <AppLayout onLogout={() => router.navigate('/login')}/>,
+    element: <AppLayout onLogout={async () => {
+      try {
+        await api.post('http://localhost:8000/api/v1/auth/logout');
+      } catch(err) {
+        console.error(err);
+      } finally {
+        router.navigate('/login')
+      }
+      
+    }}/>,
     children: [
       {index: true, element: <App />},    
       {path: 'dashboard', element: <Dashboard />},
