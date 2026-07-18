@@ -63,7 +63,7 @@ class DocumentVersion(Base):
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     document_id = Column(String, ForeignKey("documents.id"))
     revision_number = Column(Integer, nullable=False)
-    file_path = Column(String, nullable=False) # this is the path to the file in the storage
+    file = Column(String, nullable=False) # file name in the storage
     uploaded_by = Column(String, ForeignKey("users.id")) # this is the user id of the faculty who uploaded the document
     uploaded_at = Column(DateTime, default=datetime.utcnow)
 

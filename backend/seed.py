@@ -246,22 +246,22 @@ def add_document_versions(db):
     data = [
         {
             "revision_number": 1, 
-            "file_path": "uploads/SYL-2025-2026-PRELIM-001.pdf",
+            "file": "SYL-2025-2026-PRELIM-001.pdf",
             "code": "SYL-2025-2026-PRELIM-001"
         },
         {
             "revision_number": 1, 
-            "file_path": "uploads/SPM-2025-2026-MIDTERM-001.pdf",
+            "file": "SPM-2025-2026-MIDTERM-001.pdf",
             "code": "SPM-2025-2026-MIDTERM-001"
         },
         {
             "revision_number": 1, 
-            "file_path": "uploads/REC-2025-2026-FINALS-001.pdf",
+            "file": "REC-2025-2026-FINALS-001.pdf",
             "code": "REC-2025-2026-FINALS-001"
         },
         {
             "revision_number": 1, 
-            "file_path": "uploads/ACR-2025-2026-MIDTERM-001.pdf",
+            "file": "ACR-2025-2026-MIDTERM-001.pdf",
             "code": "ACR-2025-2026-MIDTERM-001"
         },
     ]
@@ -271,7 +271,7 @@ def add_document_versions(db):
             id=str(uuid.uuid4()),
             document_id=doc.id,
             revision_number=row["revision_number"],
-            file_path=row["file_path"],
+            file=row["file"],
             uploaded_by=doc.faculty_id,
             uploaded_at=doc.created_at
         )
