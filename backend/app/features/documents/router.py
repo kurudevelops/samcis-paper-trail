@@ -1,6 +1,8 @@
 from annotated_types import doc
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, HTTPException, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
+from app.core.config import settings
 from app.core.database import get_db
 from app.features.auth.dependencies import get_current_user
 from app.features.documents.models import Document, DocumentStatus, DocumentVersion, DocumentType, AcademicYear, TermEnum
@@ -32,15 +34,36 @@ def get_documents(
     data = []
     for doc, fname, lname, label in documents:
         data.append({
+            "documentId": doc.id,
             "documentCode": doc.document_code,
             "documentType": label,
             "uploader": f"{fname} {lname}",
             "status": doc.status,
             "currentRevision": doc.current_revision,
-            "createdAt": doc.created_at
+            "createdAt": doc.created_at            
         })
     return data;
     
+@router.get("/{doc_id}/download")
+async def download_document(
+    doc_id: str, 
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    doc = db.query(DocumentVersion).filter_by(document_id=doc_id).order_by(DocumentVersion.revision_number.desc()).first();
+    if not doc:
+        raise HTTPException(404, "Document not found")
+
+    file_path = settings.UPLOAD_DIR / doc.file
+    if not file_path.exists():
+        raise HTTPException(404, "File not found")
+
+    return FileResponse(
+        path=file_path,
+        filename=doc.file,  # sets Content-Disposition so browser downloads with this name
+        media_type="application/octet-stream",
+    )
+
 @router.post("/upload")
 def upload_syllabus(
     title: str = Form(...),

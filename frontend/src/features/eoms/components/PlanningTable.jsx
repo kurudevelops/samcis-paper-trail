@@ -107,7 +107,7 @@ export default function PlanningTable({ rows = [] }) {
             rows.map((row, index) => (
 
               <tr
-                key={row.documentCode}
+                key={row.documentId}
                 className={`
                   border-b border-gray-300
                   hover:bg-blue-50
@@ -159,12 +159,14 @@ export default function PlanningTable({ rows = [] }) {
                       <Eye size={18} />
                     </button>
 
-                    <button
+                    <a
                       title="Download"
-                      className="rounded p-2 transition hover:bg-green-100"
+                      className="rounded p-2 transition hover:bg-green-100" 
+                      href={`http://localhost:8000/api/v1/documents/${row.documentId}/download`}
+                      download
                     >
                       <Download size={18} />
-                    </button>
+                    </a>
 
                   </div>
 

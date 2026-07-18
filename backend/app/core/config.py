@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str = "jwt-super-secret-development-key-change-this"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
-    UPLOAD_DIR: str = "./uploads"
+    UPLOAD_DIR: Path = BASE_DIR.parent.parent / "uploads"
 
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env", 
