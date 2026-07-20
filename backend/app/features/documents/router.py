@@ -9,11 +9,12 @@ from app.features.documents.models import Document, DocumentStatus, DocumentVers
 from app.features.departments.models import Department
 from app.features.documents.storage import save_document_version
 from app.features.submission_windows.model import SubmissionWindow
-from app.features.user_roles.models import User
+from app.features.user_roles.models import User, RoleEnum
 from datetime import datetime
-
-
+from pathlib import Path
 import uuid
+import shutil
+
 
 router = APIRouter()
 
@@ -115,19 +116,20 @@ async def upload_document(
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    db.add(Document(
+    doc = Document(
         id=str(uuid.uuid4()),
         document_code=doc_code,
         doc_type_id=documentType,
         department_id=department,
         academic_year_id=academicYear,
-        faculty_id=user.id,
+        faculty_id=current_user.id,
         term=term    
-    ))
+    )
+    db.add(doc)
     db.commit()
     db.refresh(doc)
 
-    return {"id": doc.id, "filename": doc.original_filename}
+    return {"id": doc.id, "filename": stored_filename}
 
 # @router.post("/upload")
 # def upload_syllabus(

@@ -37,14 +37,15 @@ function FileInput({ onFileSelect }) {
 
 async function handleUpload(file, documentType, department, academicYear, term) {
     const formData = new FormData();
-    [file, documentType, department, academicYear, term]
-        .forEach((data) => {
-            formData.append(`${data}`, data);
-        });
-
+    formData.append("file", file);
+    formData.append("documentType", documentType);
+    formData.append("department", department);
+    formData.append("academicYear", academicYear);
+    formData.append("term", term); 
     const res = await axios.post(
         "http://localhost:8000/api/v1/documents/upload", 
         formData, 
+        {withCredentials: true},
         {headers: { "Content-Type": "multipart/form-data" }}
     );
     return res.data;
@@ -123,20 +124,17 @@ export default function NewDocument() {
                     onChange={setTerm}
                     loadOptions={() => (                                             
                         ['Prelim', 'Midterm', 'Finals'].map((term) => (
-                            <option value={term.toUpperCase()}>
+                            <option key={term} value={term.toUpperCase()}>
                                 {term}
                             </option>
                         ))
                     )}
                 />  
                 <FileInput onFileSelect={setFile} />
-                <button onClick={() => handleUpload(
-                    file, 
-                    documentType, 
-                    department, 
-                    academicYear, 
-                    term
-                )}>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    handleUpload(file, documentType, department, academicYear, term);
+                }}>
                     Upload
                 </button>                  
             </form>
