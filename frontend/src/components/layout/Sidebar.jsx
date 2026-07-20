@@ -10,7 +10,6 @@ const navItems = [
     label: "Dashboard",
     path: "/dashboard",
   },
-
   {
     label: "EOMS",
     path: "/objectives-and-target-monitoring",
@@ -38,17 +37,14 @@ const navItems = [
       },
     ],
   },
-
   {
     label: "Document Control Requests",
     path: "/document-control-requests",
   },
-
   {
     label: "Calendar",
     path: "/calendar",
   },
-
   {
     label: "User Manual",
     path: "/user-manual",
@@ -78,12 +74,19 @@ export default function Sidebar({
   return (
     <aside className="flex min-h-screen w-56 flex-col bg-blue-900 text-white">
       {/* Logo */}
-      <div className="flex flex-col items-center border-b border-blue-800 py-6">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white">
-          <span className="text-xs font-bold text-blue-900">
-            LOGO
-          </span>
-        </div>
+      <div className="flex items-center justify-center border-b border-blue-800 px-4 py-5">
+        <button
+          type="button"
+          onClick={() => onNavigate?.("/dashboard")}
+          title="Go to Dashboard"
+          className="transition hover:scale-105"
+        >
+          <img
+            src="/images/PaperTrailLogo.PNG"
+            alt="Paper Trail Logo"
+            className="h-24 w-24 object-contain"
+          />
+        </button>
       </div>
 
       {/* Navigation */}
