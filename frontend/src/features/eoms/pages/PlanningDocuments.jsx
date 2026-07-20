@@ -34,7 +34,7 @@ export default function PlanningDocuments() {
 
       <PlanningToolbar />
 
-      <PlanningTable rows={documents} />
+      <PlanningTable rows={documents}/>
 
     </div>
   );

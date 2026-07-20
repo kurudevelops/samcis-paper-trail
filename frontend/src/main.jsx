@@ -11,6 +11,8 @@ import DocumentControlRequest from "./features/document-control-requests/Documen
 
 import ObjectivesMonitoring from "./features/eoms/pages/ObjectivesMonitoring";
 import PlanningDocuments from "./features/eoms/pages/PlanningDocuments";
+import PlanningTable from "./features/eoms/components/PlanningTable";
+import NewDocumentForm from "./features/eoms/pages/NewDocumentForm";
 
 import Login from "./features/auth/Login";
 
@@ -33,6 +35,7 @@ const router = createBrowserRouter([
       {path: 'dashboard', element: <Dashboard />},
       {path: 'document-control-requests', element: <DocumentControlRequest />},
       {path: 'planning-documents', element: <PlanningDocuments />},
+      {path: 'new-document', element: <NewDocumentForm />},      
       {path: 'objectives-and-target-monitoring', element: <ObjectivesMonitoring />}
     ]
   }, { path: 'login', element: <Login />}

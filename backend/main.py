@@ -8,6 +8,7 @@ from app.features.departments.models import Department
 from app.features.user_roles.models import User
 from app.features.documents.models import Document, DocumentVersion, DocumentType, AcademicYear
 from app.features.documents.router import router as documents_router
+from app.features.departments.router import router as departments_router
 from app.features.auth.router import router as auth_router
 from app.features.workflow.models import Signature, StatusLog
 from app.features.workflow.router import router as workflow_router
@@ -39,6 +40,7 @@ app.add_middleware(
 
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(documents_router, prefix="/api/v1/documents", tags=["Documents"])
+app.include_router(departments_router, prefix="/api/v1/departments", tags=["Departments"])
 app.include_router(workflow_router, prefix="/api/v1/workflow", tags=["Workflow"])
 app.include_router(notifications_router, prefix="/api/v1/notifications", tags=["Notifications"])
 app.include_router(window_router, prefix="/api/v1/submission-windows", tags=["Submission Windows"])

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function PlanningHeader() {
   return (
     <div className="flex items-start justify-between mb-8">
@@ -22,7 +24,8 @@ export default function PlanningHeader() {
           to this button.
       ============================================= */}
 
-      <button
+      <Link
+        to="/new-document"
         className="
           bg-blue-900
           hover:bg-blue-800
@@ -36,7 +39,7 @@ export default function PlanningHeader() {
         "
       >
         + New
-      </button>
+      </Link>
 
     </div>
   );
