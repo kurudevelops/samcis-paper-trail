@@ -1,24 +1,21 @@
-import {
-  Eye,
-  Download,
-  ArrowUpDown,
-} from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
+import ControlledDocumentsActions from "./ControlledDocumentsActions";
 
-export default function PlanningTable({ rows = [] }) {
+export default function ControlledDocumentsTable({
+  rows = [],
+  onView,
+  onDownload,
+}) {
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-300">
-
       <table className="min-w-full text-sm">
-
         {/* ==========================================
             TABLE HEADER
         ========================================== */}
 
         <thead className="bg-blue-900 text-white">
-
           <tr>
-
-            <th className="px-6 py-3 text-left font-semibold border-r border-blue-700">
+            <th className="border-r border-blue-700 px-6 py-3 text-left font-semibold">
               <div className="flex items-center gap-1">
                 Document Code
                 <ArrowUpDown
@@ -29,7 +26,7 @@ export default function PlanningTable({ rows = [] }) {
               </div>
             </th>
 
-            <th className="px-6 py-3 text-left font-semibold border-r border-blue-700">
+            <th className="border-r border-blue-700 px-6 py-3 text-left font-semibold">
               <div className="flex items-center gap-1">
                 Title
                 <ArrowUpDown
@@ -40,8 +37,8 @@ export default function PlanningTable({ rows = [] }) {
               </div>
             </th>
 
-            <th className="px-6 py-3 text-center font-semibold border-r border-blue-700">
-              <div className="flex justify-center items-center gap-1">
+            <th className="border-r border-blue-700 px-6 py-3 text-center font-semibold">
+              <div className="flex items-center justify-center gap-1">
                 Type
                 <ArrowUpDown
                   size={13}
@@ -51,8 +48,8 @@ export default function PlanningTable({ rows = [] }) {
               </div>
             </th>
 
-            <th className="px-6 py-3 text-center font-semibold border-r border-blue-700">
-              <div className="flex justify-center items-center gap-1">
+            <th className="border-r border-blue-700 px-6 py-3 text-center font-semibold">
+              <div className="flex items-center justify-center gap-1">
                 Revision
                 <ArrowUpDown
                   size={13}
@@ -62,8 +59,8 @@ export default function PlanningTable({ rows = [] }) {
               </div>
             </th>
 
-            <th className="px-6 py-3 text-center font-semibold border-r border-blue-700">
-              <div className="flex justify-center items-center gap-1">
+            <th className="border-r border-blue-700 px-6 py-3 text-center font-semibold">
+              <div className="flex items-center justify-center gap-1">
                 Effectivity
                 <ArrowUpDown
                   size={13}
@@ -73,14 +70,10 @@ export default function PlanningTable({ rows = [] }) {
               </div>
             </th>
 
-            <th className="px-6 py-3 text-center font-semibold w-36">
-              <div className="flex justify-center items-center gap-1">
-                Actions
-              </div>
+            <th className="w-36 px-6 py-3 text-center font-semibold">
+              Actions
             </th>
-
           </tr>
-
         </thead>
 
         {/* ==========================================
@@ -88,34 +81,30 @@ export default function PlanningTable({ rows = [] }) {
         ========================================== */}
 
         <tbody className="bg-white">
-
           {rows.length === 0 ? (
-
             <tr>
-
               <td
                 colSpan={6}
                 className="py-16 text-center text-gray-400"
               >
-                No planning documents available.
+                No controlled documents available.
               </td>
-
             </tr>
-
           ) : (
-
             rows.map((row, index) => (
-
               <tr
                 key={row.id}
                 className={`
                   border-b border-gray-300
-                  hover:bg-blue-50
                   transition-colors
-                  ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                  hover:bg-blue-50
+                  ${
+                    index % 2 === 0
+                      ? "bg-white"
+                      : "bg-gray-50"
+                  }
                 `}
               >
-
                 <td className="px-6 py-5">
                   {row.documentCode}
                 </td>
@@ -136,50 +125,42 @@ export default function PlanningTable({ rows = [] }) {
                   {row.effectivity}
                 </td>
 
-                {/* ==========================================
-                    FRONTEND PLACEHOLDER
-
-                    BACKEND TEAM
-
-                    View:
-                    Navigate to document details.
-
-                    Download:
-                    Return document file or PDF.
-                ========================================== */}
-
                 <td className="px-6 py-5">
-
-                  <div className="flex justify-center gap-2">
-
-                    <button
-                      title="View"
-                      className="rounded p-2 transition hover:bg-blue-100"
-                    >
-                      <Eye size={18} />
-                    </button>
-
-                    <button
-                      title="Download"
-                      className="rounded p-2 transition hover:bg-green-100"
-                    >
-                      <Download size={18} />
-                    </button>
-
-                  </div>
-
+                  <ControlledDocumentsActions
+                    row={row}
+                    onView={onView}
+                    onDownload={onDownload}
+                  />
                 </td>
-
               </tr>
-
             ))
-
           )}
-
         </tbody>
-
       </table>
 
+      {/*
+      ======================================================
+
+      BACKEND TEAM
+
+      The page component should pass handlers to:
+
+      onView(row)
+      onDownload(row)
+
+      Example:
+
+      onView:
+      GET /api/controlled-documents/{id}
+
+      onDownload:
+      GET /api/controlled-documents/{id}/download
+
+      The backend should validate that the authenticated
+      user has permission to access the requested document.
+
+      ======================================================
+      */}
     </div>
   );
 }

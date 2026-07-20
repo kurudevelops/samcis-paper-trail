@@ -10,8 +10,11 @@ import AppLayout from "./components/layout/AppLayout";
 import Dashboard from "./features/dashboard/Dashboard";
 import DocumentControlRequest from "./features/document-control-requests/DocumentControlRequest";
 
-import ObjectivesMonitoring from "./features/eoms/pages/ObjectivesMonitoring";
-import PlanningDocuments from "./features/eoms/pages/PlanningDocuments";
+import ObjectivesMonitoring from "./features/eoms/objectives/pages/ObjectivesMonitoring";
+import ControlledDocuments from "./features/eoms/controlled-documents/pages/ControlledDocuments";
+import PlanningDocuments from "./features/eoms/planning/pages/PlanningDocuments";
+import QualityRecords from "./features/eoms/quality-records/pages/QualityRecords";
+import RequestForAction from "./features/eoms/request-for-action/pages/RequestForAction";
 
 import CalendarPage from "./features/calendar/pages/CalendarPage";
 
@@ -26,14 +29,16 @@ function App() {
             />
           }
         >
+          {/* Dashboard */}
           <Route
             path="/dashboard"
             element={<Dashboard />}
           />
 
+          {/* EOMS */}
           <Route
-            path="/objectives-and-target-monitoring"
-            element={<ObjectivesMonitoring />}
+            path="/controlled-documents"
+            element={<ControlledDocuments />}
           />
 
           <Route
@@ -42,15 +47,33 @@ function App() {
           />
 
           <Route
+            path="/objectives-and-target-monitoring"
+            element={<ObjectivesMonitoring />}
+          />
+
+          <Route
+            path="/quality-records"
+            element={<QualityRecords />}
+          />
+
+          <Route
+            path="/request-for-action"
+            element={<RequestForAction />}
+          />
+
+          {/* Document Control Requests */}
+          <Route
             path="/document-control-requests"
             element={<DocumentControlRequest />}
           />
 
+          {/* Calendar */}
           <Route
             path="/calendar"
             element={<CalendarPage />}
           />
 
+          {/* Root redirect */}
           <Route
             index
             element={
@@ -62,6 +85,7 @@ function App() {
           />
         </Route>
 
+        {/* Unknown URL redirect */}
         <Route
           path="*"
           element={
