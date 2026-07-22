@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+
 from app.core.database import get_db
 from app.core.security import create_access_token
 from app.features.user_roles.models import User, RoleEnum
@@ -17,9 +18,6 @@ def google_login(token: str, db: Session = Depends(get_db)):
 
 @router.post("/dev-login")
 def dev_login(email: str, role: RoleEnum, department_code: str, db: Session = Depends(get_db)):
-    """
-    Development endpoint to bypass Google Auth and instantly generate a test user and JWT.
-    """
     dept = db.query(Department).filter(Department.id == department_code).first()
     if not dept:
         raise HTTPException(status_code=404, detail="Department not found")
@@ -39,9 +37,7 @@ def dev_login(email: str, role: RoleEnum, department_code: str, db: Session = De
         db.commit()
         db.refresh(user)
 
-    access_token = create_access_token(
-        data={"sub": user.id, "role": user.role.value}
-    )
+    access_token = create_access_token(data={"sub": user.id, "role": user.role.value})
 
     return {
         "access_token": access_token,

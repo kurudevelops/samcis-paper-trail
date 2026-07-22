@@ -34,40 +34,41 @@ def can_view_document(user: User, document: Document) -> bool:
 def upload_syllabus(
     title: str = Form(...),
     term: TermEnum = Form(...),
+    document_type: str = Form(...),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     if current_user.role != RoleEnum.FACULTY:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only faculty can upload documents.")
 
     dept = db.query(Department).filter(Department.id == current_user.department_id).first()
     ay = db.query(AcademicYear).filter(AcademicYear.is_active == True).first()
-    doc_type = db.query(DocumentType).filter(DocumentType.prefix == "SYL").first()
+    doc_type = db.query(DocumentType).filter(DocumentType.prefix == document_type).first()
 
     if not ay or not doc_type:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="System configuration missing: Ensure an active academic year and SYL document type exist"
+            detail="System configuration missing: Ensure an active academic year and valid document type exist",
         )
 
     window = db.query(SubmissionWindow).filter(
         SubmissionWindow.academic_year == ay.label,
         SubmissionWindow.term == term,
-        SubmissionWindow.is_active == True
+        SubmissionWindow.is_active == True,
     ).first()
 
     if not window:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No active submission window found for the specified academic year and term."
+            detail="No active submission window found for the specified academic year and term.",
         )
 
     now = datetime.utcnow()
     if not (window.start_date <= now <= window.end_date):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"The submission window for {ay.label} {term.value} is not currently open."
+            detail=f"The submission window for {ay.label} {term.value} is not currently open.",
         )
 
     count = db.query(Document).filter(
@@ -102,7 +103,7 @@ def upload_syllabus(
         revision_number=1,
         file_path=file_path,
         uploaded_by=current_user.id,
-        change_note="Initial upload"
+        change_note="Initial upload",
     )
     db.add(new_version)
     db.commit()
@@ -117,7 +118,7 @@ def upload_syllabus(
 @router.get("")
 def list_documents(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     query = db.query(Document).filter(Document.is_deleted == False)
 
@@ -149,11 +150,11 @@ def list_documents(
 def download_document(
     document_id: str,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     document = db.query(Document).filter(
         Document.id == document_id,
-        Document.is_deleted == False
+        Document.is_deleted == False,
     ).first()
 
     if not document:
@@ -176,7 +177,7 @@ def download_document(
     return FileResponse(
         path=latest_version.file_path,
         filename=filename,
-        media_type="application/octet-stream"
+        media_type="application/octet-stream",
     )
 
 @router.post("/{document_id}/revise")
@@ -185,7 +186,7 @@ def revise_document(
     file: UploadFile = File(...),
     change_note: str = Form(None),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     if current_user.role != RoleEnum.FACULTY:
         raise HTTPException(status_code=403, detail="Only Faculty can revise documents.")
@@ -200,7 +201,7 @@ def revise_document(
     if doc.status == DocumentStatus.DEAN_APPROVED:
         raise HTTPException(
             status_code=400,
-            detail="Cannot revise a fully approved document directly. An amendment request is required."
+            detail="Cannot revise a fully approved document directly. An amendment request is required.",
         )
 
     dept = db.query(Department).filter(Department.id == doc.department_id).first()
@@ -213,7 +214,7 @@ def revise_document(
         revision_number=new_revision_number,
         file_path=file_path,
         uploaded_by=current_user.id,
-        change_note=change_note
+        change_note=change_note,
     )
     db.add(new_version)
     doc.current_revision = new_revision_number
@@ -227,14 +228,14 @@ def revise_document(
         "message": "Revision uploaded successfully!",
         "document_code": doc.document_code,
         "new_revision": new_revision_number,
-        "status": doc.status
+        "status": doc.status,
     }
 
 @router.delete("/{document_id}")
 def soft_delete_document(
     document_id: str,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     doc = db.query(Document).filter(Document.id == document_id).first()
     if not doc:
@@ -250,7 +251,7 @@ def soft_delete_document(
         if doc.status not in [DocumentStatus.DRAFT, DocumentStatus.SUBMITTED, DocumentStatus.REJECTED]:
             raise HTTPException(
                 status_code=400,
-                detail="You can only delete your own documents if it is currently moving through the approval process"
+                detail="You can only delete your own documents if it is currently moving through the approval process",
             )
 
     doc.is_deleted = True

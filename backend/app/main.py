@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from app.core.database import engine, Base
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.core.database import engine, Base
 
 from app.features.departments.models import Department
 from app.features.user_roles.models import User

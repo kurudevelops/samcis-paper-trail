@@ -6,6 +6,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import SignIn from "./features/SignIn";
 import Dashboard from "./features/dashboard/Dashboard";
 import RepositoryPage from "./features/documents/RepositoryPage";
+import UploadDocumentPage from "./features/documents/UploadDocumentPage";
+import SubmissionWindowsPage from "./features/submission-windows/SubmissionWindowsPage";
 
 function App() {
   return (
@@ -17,6 +19,9 @@ function App() {
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/repository" element={<RepositoryPage />} />
+            <Route path="/submissions" element={<UploadDocumentPage />} />
+            <Route path="/upload" element={<Navigate to="/submissions" replace />} />
+            <Route path="/submission-windows" element={<SubmissionWindowsPage />} />
             <Route index element={<Navigate to="/dashboard" replace />} />
           </Route>
         </Route>

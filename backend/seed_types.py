@@ -14,7 +14,7 @@ def seed_document_types():
         {"prefix": "SYL", "label": "Syllabus"},
         {"prefix": "EXM", "label": "Exam"},
         {"prefix": "AFR", "label": "AFAR"},
-        {"prefix": "STA", "label": "Statistics"}
+        {"prefix": "STA", "label": "Statistics"},
     ]
 
     for t in types:

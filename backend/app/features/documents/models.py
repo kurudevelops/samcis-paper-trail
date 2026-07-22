@@ -4,6 +4,7 @@ from app.core.database import Base
 from datetime import datetime
 import uuid
 import enum
+from app.features.document_control.models import DocumentControlRequest
 
 class TermEnum(str, enum.Enum):
     PRELIM = "Prelim"
@@ -67,4 +68,3 @@ class DocumentVersion(Base):
     uploaded_by = Column(String, ForeignKey("users.id")) # this is the user id of the faculty who uploaded the document
     uploaded_at = Column(DateTime, default=datetime.utcnow)
 
-    

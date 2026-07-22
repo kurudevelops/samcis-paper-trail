@@ -1,44 +1,30 @@
-import { useState } from "react";
-import {
-  ChevronDown,
-  ChevronRight,
-  LogOut,
-} from "lucide-react";
-
-const navItems = [
-  {
-    label: "Dashboard",
-    path: "/dashboard",
-  },
-  {
-    label: "Repository",
-    path: "/repository",
-  },
-];
+import { LogOut } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Sidebar({
   activePath = "/dashboard",
   onNavigate,
   onLogout,
 }) {
-  const [openMenu, setOpenMenu] = useState("EOMS");
-
-  function toggleMenu(label) {
-    setOpenMenu((previousMenu) =>
-      previousMenu === label ? null : label
-    );
-  }
+  const { user } = useAuth();
 
   function isPathActive(path) {
-    return (
-      activePath === path ||
-      activePath.startsWith(`${path}/`)
-    );
+    return activePath === path || activePath.startsWith(`${path}/`);
   }
+
+  const visibleItems = [
+    { label: "Dashboard", path: "/dashboard" },
+    { label: "Repository", path: "/repository" },
+    ...(user?.role === "faculty"
+      ? [{ label: "Submissions", path: "/submissions" }]
+      : []),
+    ...((user?.role === "dean" || user?.role === "administrator")
+      ? [{ label: "Submission Windows", path: "/submission-windows" }]
+      : []),
+  ];
 
   return (
     <aside className="flex min-h-screen w-56 flex-col bg-blue-900 text-white">
-      {/* Logo */}
       <div className="flex items-center justify-center border-b border-blue-800 px-4 py-5">
         <button
           type="button"
@@ -54,9 +40,8 @@ export default function Sidebar({
         </button>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 py-4">
-        {navItems.map((item) => {
+        {visibleItems.map((item) => {
           const isActive = isPathActive(item.path);
 
           return (
@@ -68,15 +53,12 @@ export default function Sidebar({
                 isActive ? "bg-blue-800 font-semibold" : ""
               }`}
             >
-              <span className="flex-1 text-left">
-                {item.label}
-              </span>
+              <span className="flex-1 text-left">{item.label}</span>
             </button>
           );
         })}
       </nav>
 
-      {/* Logout */}
       <button
         type="button"
         onClick={onLogout}
