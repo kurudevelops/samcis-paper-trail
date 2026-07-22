@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 from app.core.database import Base
 import uuid
+from app.features.user_roles.models import User
 
 class DcrStatus(str, enum.Enum):
     PENDING = "Pending"

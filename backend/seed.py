@@ -1,41 +1,99 @@
 import uuid
 from app.core.database import SessionLocal, Base, engine
 from app.features.departments.models import Department
+from app.features.user_roles.models import User, RoleEnum
 
-# Ensure tables are created just in case
 Base.metadata.create_all(bind=engine)
 
-def seed_departments():
+def seed_departments(db):
+    if db.query(Department).count() > 0:
+        print("Departments are already seeded. Skipping.")
+        return
+
+    departments_seed = [
+        {"id": "BAE", "code": "BAE", "name": "Business Administration Entrepreneurship"},
+        {"id": "IT_MMA", "code": "IT & MMA", "name": "IT & MMA"},
+        {"id": "CS_CAD", "code": "CS & CAD", "name": "CS & CAD"},
+        {"id": "ACT", "code": "Accountancy", "name": "Accountancy"},
+        {"id": "HTM", "code": "HTM", "name": "Hotel & Tourism Management"},
+        {"id": "MATH", "code": "Math", "name": "Mathematics Department"},
+    ]
+
+    for dept in departments_seed:
+        db.add(Department(id=dept["id"], name=dept["name"], code=dept["code"]))
+
+    db.commit()
+    print("Successfully seeded departments!")
+
+def seed_test_users(db):
+    if db.query(User).count() > 0:
+        print("Users are already seeded. Skipping.")
+        return
+
+    test_users = [
+        {
+            "first_name": "Juan",
+            "last_name": "Dela Cruz",
+            "email": "faculty123@test.com",
+            "role": RoleEnum.FACULTY,
+            "department_id": "CS_CAD",
+            "google_sub": "mock_google_sub_faculty123",
+        },
+        {
+            "first_name": "Maria",
+            "last_name": "Clara",
+            "email": "auditor123@test.com",
+            "role": RoleEnum.AUDITOR,
+            "department_id": "ACT",
+            "google_sub": "mock_google_sub_auditor123",
+        },
+        {
+            "first_name": "Ana",
+            "last_name": "Santos",
+            "email": "secretary123@test.com",
+            "role": RoleEnum.SECRETARY,
+            "department_id": "BAE",
+            "google_sub": "mock_google_sub_secretary123",
+        },
+        {
+            "first_name": "hatdog",
+            "last_name": "testing",
+            "email": "dean123@test.com",
+            "role": RoleEnum.DEAN,
+            "department_id": "IT_MMA",
+            "google_sub": "mock_google_sub_dean123",
+        },
+        {
+            "first_name": "System",
+            "last_name": "Admin",
+            "email": "admin123@test.com",
+            "role": RoleEnum.ADMINISTRATOR,
+            "department_id": "BAE",
+            "google_sub": "mock_google_sub_admin123",
+        },
+    ]
+
+    for user_data in test_users:
+        db.add(
+            User(
+                id=str(uuid.uuid4()),
+                first_name=user_data["first_name"],
+                last_name=user_data["last_name"],
+                email=user_data["email"],
+                role=user_data["role"],
+                department_id=user_data["department_id"],
+                google_sub=user_data["google_sub"],
+            )
+        )
+
+    db.commit()
+    print("Successfully seeded test users!")
+
+def main():
     db = SessionLocal()
     try:
-        # Check if the database is already seeded to prevent duplicates
-        if db.query(Department).count() > 0:
-            print("Departments are already seeded. Skipping.")
-            return
-
-        # The 6 departments specified in the documentation
-        departments_data = [
-            {"name": "Computer and Information Sciences", "code": "CIS"},
-            {"name": "Placeholder Department 2", "code": "DEPT2"},
-            {"name": "Placeholder Department 3", "code": "DEPT3"},
-            {"name": "Placeholder Department 4", "code": "DEPT4"},
-            {"name": "Placeholder Department 5", "code": "DEPT5"},
-            {"name": "Placeholder Department 6", "code": "DEPT6"},
-        ]
-
-        # Add each department to the database session
-        for dept in departments_data:
-            new_department = Department(
-                id=str(uuid.uuid4()),
-                name=dept["name"],
-                code=dept["code"]
-            )
-            db.add(new_department)
-
-        # Commit the transaction to save them to the database
-        db.commit()
-        print("Successfully seeded 6 departments into the database!")
-
+        seed_departments(db)
+        seed_test_users(db)
     except Exception as e:
         print(f"An error occurred: {e}")
         db.rollback()
@@ -44,4 +102,4 @@ def seed_departments():
 
 if __name__ == "__main__":
     print("Starting database seeding process...")
-    seed_departments()
+    main()

@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.core.database import engine, Base
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.features.departments.models import Department
 from app.features.user_roles.models import User
@@ -14,10 +15,22 @@ from app.features.submission_windows.router import router as window_router
 from app.features.analytics.router import router as analytics_router
 from app.features.calendar.router import router as calendar_router
 from app.features.document_control.router import router as dcr_router
+from app.features.document_control.models import DocumentControlRequest
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Paper Trail 2.0 API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(documents_router, prefix="/api/v1/documents", tags=["Documents"])

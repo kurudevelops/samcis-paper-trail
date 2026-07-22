@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import datetime
 from app.features.document_control.models import DcrStatus
@@ -9,7 +9,7 @@ class DcrCreate(BaseModel):
 
 class DcrDecide(BaseModel):
     status: DcrStatus
-    remarks: Optional[str] = None # Optional context from the Dean
+    remarks: Optional[str] = None
 
 class DcrResponse(BaseModel):
     id: str
@@ -21,5 +21,4 @@ class DcrResponse(BaseModel):
     decided_by: Optional[str] = None
     decided_at: Optional[datetime] = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
