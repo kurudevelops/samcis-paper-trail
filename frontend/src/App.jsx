@@ -1,51 +1,32 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import AppLayout from "./components/layout/AppLayout";
-import Dashboard from "./features/dashboard/Dashboard";
-import DocumentControlRequest from "./features/document-control-requests/DocumentControlRequest";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-import ObjectivesMonitoring from "./features/eoms/pages/ObjectivesMonitoring";
-import PlanningDocuments from "./features/eoms/pages/PlanningDocuments";
+import SignIn from "./features/SignIn";
+import Dashboard from "./features/dashboard/Dashboard";
+import RepositoryPage from "./features/documents/RepositoryPage";
+import UploadDocumentPage from "./features/documents/UploadDocumentPage";
+import SubmissionWindowsPage from "./features/submission-windows/SubmissionWindowsPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          element={
-            <AppLayout
-              onLogout={() => console.log("Logout clicked")}
-            />
-          }
-        >
-          <Route
-            path="/dashboard"
-            element={<Dashboard />}
-          />
+        <Route path="/sign-in" element={<SignIn />} />
 
-          <Route
-            path="/objectives-and-target-monitoring"
-            element={<ObjectivesMonitoring />}
-          />
-
-          <Route
-            path="/planning-documents"
-            element={<PlanningDocuments />}
-          />
-
-          <Route
-            path="/document-control-requests"
-            element={<DocumentControlRequest />}
-          />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/repository" element={<RepositoryPage />} />
+            <Route path="/submissions" element={<UploadDocumentPage />} />
+            <Route path="/upload" element={<Navigate to="/submissions" replace />} />
+            <Route path="/submission-windows" element={<SubmissionWindowsPage />} />
+            <Route index element={<Navigate to="/dashboard" replace />} />
+          </Route>
         </Route>
 
-        {/* Redirect root to Dashboard */}
-
-        <Route
-          path="/"
-          element={<Navigate to="/dashboard" replace />}
-        />
-
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+<<<<<<< HEAD:backend/main.py
+=======
+
+>>>>>>> pulmano/beta:backend/app/main.py
 from app.core.database import engine, Base
 
 from app.features.departments.models import Department
@@ -15,10 +19,13 @@ from app.features.submission_windows.router import router as window_router
 from app.features.analytics.router import router as analytics_router
 from app.features.calendar.router import router as calendar_router
 from app.features.document_control.router import router as dcr_router
+from app.features.document_control.models import DocumentControlRequest
+from app.features.academic_years.router import router as academic_years_router
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Paper Trail 2.0 API")
 
+<<<<<<< HEAD:backend/main.py
 origins = [
     "http://localhost:5173" # Default port for Vite frontend (change/add as needed)
 ]
@@ -26,6 +33,14 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+=======
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+>>>>>>> pulmano/beta:backend/app/main.py
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -39,6 +54,7 @@ app.include_router(window_router, prefix="/api/v1/submission-windows", tags=["Su
 app.include_router(analytics_router, prefix="/api/v1/analytics", tags=["Analytics Dashboard"])
 app.include_router(calendar_router, prefix="/api/v1/calendar", tags=["Calendar Integration"])
 app.include_router(dcr_router, prefix="/api/v1")
+app.include_router(academic_years_router, prefix="/api/v1/academic-years", tags=["Academic Years"])
 
 @app.get("/")
 def read_root():
