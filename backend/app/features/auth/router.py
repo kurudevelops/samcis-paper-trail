@@ -9,6 +9,15 @@ import uuid
 
 router = APIRouter()
 
+SCHOOL_WIDE_ROLES = [
+    RoleEnum.DEAN,
+    RoleEnum.SECRETARY,
+    RoleEnum.AUDITOR,
+    RoleEnum.ASSOCIATE_DEAN,
+    RoleEnum.LIBRARIAN,
+    RoleEnum.ADMINISTRATOR,
+]
+
 @router.post("/login/google")
 def google_login(token: str, db: Session = Depends(get_db)):
     if not token or token != "valid_google_token":
@@ -17,10 +26,15 @@ def google_login(token: str, db: Session = Depends(get_db)):
     return {"message": "Google verification logic is not implemented yet. This is a placeholder response."}
 
 @router.post("/dev-login")
-def dev_login(email: str, role: RoleEnum, department_code: str, db: Session = Depends(get_db)):
-    dept = db.query(Department).filter(Department.id == department_code).first()
-    if not dept:
-        raise HTTPException(status_code=404, detail="Department not found")
+def dev_login(email: str, role: RoleEnum, department_code: str | None = None, db: Session = Depends(get_db)):
+    dept = None
+
+    if role not in SCHOOL_WIDE_ROLES:
+        if not department_code:
+            raise HTTPException(status_code=400, detail=f"{role.value} requires a department_code")
+        dept = db.query(Department).filter(Department.id == department_code).first()
+        if not dept:
+            raise HTTPException(status_code=404, detail="Department not found")
 
     user = db.query(User).filter(User.email == email).first()
     if not user:
@@ -30,7 +44,7 @@ def dev_login(email: str, role: RoleEnum, department_code: str, db: Session = De
             last_name="User",
             email=email,
             role=role,
-            department_id=dept.id,
+            department_id=dept.id if dept else None,
             google_sub=f"dev_sub_{uuid.uuid4()}",
         )
         db.add(user)
@@ -45,6 +59,6 @@ def dev_login(email: str, role: RoleEnum, department_code: str, db: Session = De
         "user": {
             "email": user.email,
             "role": user.role.value,
-            "department": dept.id,
+            "department": dept.id if dept else None,
         },
     }

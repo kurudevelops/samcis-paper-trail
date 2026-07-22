@@ -30,11 +30,15 @@ def can_view_document(user: User, document: Document) -> bool:
         return user.id == document.faculty_id
     return False
 
+@router.get("/types")
+def list_document_types(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return db.query(DocumentType).all()
+
 @router.post("/upload")
 def upload_syllabus(
     title: str = Form(...),
     term: TermEnum = Form(...),
-    document_type: str = Form(...),
+    window_id: str = Form(...),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -44,36 +48,35 @@ def upload_syllabus(
 
     dept = db.query(Department).filter(Department.id == current_user.department_id).first()
     ay = db.query(AcademicYear).filter(AcademicYear.is_active == True).first()
-    doc_type = db.query(DocumentType).filter(DocumentType.prefix == document_type).first()
 
-    if not ay or not doc_type:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="System configuration missing: Ensure an active academic year and valid document type exist",
-        )
+    if not ay:
+        raise HTTPException(status_code=400, detail="No active academic year configured.")
 
     window = db.query(SubmissionWindow).filter(
+        SubmissionWindow.id == window_id,
         SubmissionWindow.academic_year == ay.label,
         SubmissionWindow.term == term,
         SubmissionWindow.is_active == True,
     ).first()
 
     if not window:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No active submission window found for the specified academic year and term.",
-        )
+        raise HTTPException(status_code=400, detail="That submission window is not open or doesn't exist.")
+
+    doc_type = db.query(DocumentType).filter(DocumentType.id == window.doc_type_id).first()
+    if not doc_type:
+        raise HTTPException(status_code=400, detail="Submission window has no valid document type configured.")
 
     now = datetime.utcnow()
     if not (window.start_date <= now <= window.end_date):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=400,
             detail=f"The submission window for {ay.label} {term.value} is not currently open.",
         )
 
     count = db.query(Document).filter(
         Document.department_id == dept.id,
         Document.academic_year_id == ay.id,
+        Document.doc_type_id == doc_type.id,
     ).count() + 1
 
     sequence = f"{count:03d}"
@@ -107,7 +110,6 @@ def upload_syllabus(
     )
     db.add(new_version)
     db.commit()
-    db.refresh(new_doc)
 
     return {
         "message": "Syllabus uploaded successfully",

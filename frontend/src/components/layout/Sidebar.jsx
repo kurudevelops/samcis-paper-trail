@@ -1,5 +1,7 @@
 import { LogOut } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import ActiveYearBadge from "../ActiveYearBadge"; 
+
 
 export default function Sidebar({
   activePath = "/dashboard",
@@ -38,6 +40,15 @@ export default function Sidebar({
             className="h-24 w-24 object-contain"
           />
         </button>
+      </div>
+
+      {/* ADD THIS BLOCK — user info + active year, shown on every page */}
+      <div className="border-b border-blue-800 px-4 py-3 text-xs">
+        <p className="font-semibold">{user?.first_name} {user?.last_name}</p>
+        <p className="text-blue-300 capitalize">{user?.role}</p>
+        <div className="mt-2">
+          <ActiveYearBadge className="rounded-full bg-blue-700 text-white text-xs font-semibold px-3 py-1" />
+        </div>
       </div>
 
       <nav className="flex-1 py-4">

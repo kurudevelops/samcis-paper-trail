@@ -10,8 +10,10 @@ export default function SubmissionWindowsPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [windowLoading, setWindowLoading] = useState(false);
+  const [types, setTypes] = useState([]);
 
   const [form, setForm] = useState({
+    doc_type_id: "",
     academic_year: "2026-2027",
     term: "Prelim",
     start_date: "",
@@ -52,6 +54,10 @@ export default function SubmissionWindowsPage() {
     };
   }, [canAccess]);
 
+  useEffect(() => {
+  apiClient.get("/documents/types").then((res) => setTypes(res.data)).catch(() => {});
+}, []);
+
   if (!canAccess) {
     return <Navigate to="/dashboard" replace />;
   }
@@ -79,6 +85,7 @@ export default function SubmissionWindowsPage() {
       setMessage("Submission window created successfully.");
       setWindows((previous) => [response.data, ...previous]);
       setForm({
+        doc_type_id: "",
         academic_year: "2026-2027",
         term: "Prelim",
         start_date: "",
@@ -128,6 +135,22 @@ export default function SubmissionWindowsPage() {
         </div>
 
         <div className="grid gap-2">
+        <label className="text-sm font-medium text-gray-700">Document Type</label>
+        <select
+          name="doc_type_id"
+          value={form.doc_type_id}
+          onChange={handleChange}
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
+          required
+        >
+          <option value="">Select type...</option>
+          {types.map((t) => (
+            <option key={t.id} value={t.id}>{t.label}</option>
+          ))}
+        </select>
+      </div>
+
+        <div className="grid gap-2">
           <label className="text-sm font-medium text-gray-700">Start Date</label>
           <input
             type="datetime-local"
@@ -167,6 +190,7 @@ export default function SubmissionWindowsPage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Year</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Type</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Term</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Start</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">End</th>
@@ -184,6 +208,7 @@ export default function SubmissionWindowsPage() {
                 windows.map((window) => (
                   <tr key={window.id}>
                     <td className="px-4 py-3 text-sm text-gray-800">{window.academic_year}</td>
+                    <td className="px-4 py-3 text-sm text-gray-800">{window.doc_type_label}</td>
                     <td className="px-4 py-3 text-sm text-gray-800">{window.term}</td>
                     <td className="px-4 py-3 text-sm text-gray-600">{window.start_date}</td>
                     <td className="px-4 py-3 text-sm text-gray-600">{window.end_date}</td>

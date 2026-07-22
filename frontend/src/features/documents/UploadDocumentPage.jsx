@@ -13,7 +13,6 @@ export default function UploadDocumentPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [windowLoading, setWindowLoading] = useState(false);
-  const [documentType, setDocumentType] = useState("SYL");
 
   useEffect(() => {
     let cancelled = false;
@@ -21,7 +20,7 @@ export default function UploadDocumentPage() {
     async function loadWindows() {
       try {
         setWindowLoading(true);
-        const response = await apiClient.get("/submission-windows/");
+        const response = await apiClient.get("/submission-windows/?academic_year=active");
         if (!cancelled) {
           setWindows(response.data);
         }
@@ -70,7 +69,7 @@ export default function UploadDocumentPage() {
       formData.append("title", title);
       formData.append("term", term);
       formData.append("file", file);
-      formData.append("document_type", documentType);
+      formData.append("window_id", selectedWindowId);
 
       const response = await apiClient.post("/documents/upload", formData, {
         headers: {
@@ -127,6 +126,7 @@ export default function UploadDocumentPage() {
                 <tr>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Year</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Term</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Type</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Start</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">End</th>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-gray-600">Action</th>
@@ -140,6 +140,7 @@ export default function UploadDocumentPage() {
                   >
                     <td className="px-4 py-3 text-sm text-gray-800">{window.academic_year}</td>
                     <td className="px-4 py-3 text-sm text-gray-800">{window.term}</td>
+                    <td className="px-4 py-3 text-sm text-gray-800">{window.doc_type_label}</td>
                     <td className="px-4 py-3 text-sm text-gray-600">{window.start_date}</td>
                     <td className="px-4 py-3 text-sm text-gray-600">{window.end_date}</td>
                     <td className="px-4 py-3 text-right">
@@ -219,23 +220,6 @@ export default function UploadDocumentPage() {
             className="block w-full text-sm text-gray-700"
             required
           />
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">
-            Document Type
-          </label>
-          <select
-            value={documentType}
-            onChange={(event) => setDocumentType(event.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
-            required
-          >
-            <option value="SYL">Syllabus</option>
-            <option value="EXM">Exam</option>
-            <option value="AFR">AFAR</option>
-            <option value="STA">Statistics</option>
-          </select>
         </div>
 
         <button

@@ -41,6 +41,7 @@ class Document(Base):
     __tablename__ = "documents"
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     document_code = Column(String, nullable=False, unique=True) # this is the unique code for the document, like SYL-2023-2024-PRELIM-001
+    title = Column(String, nullable=False)
 
     # Foreign keys
     doc_type_id = Column(String, ForeignKey("document_types.id"))
@@ -64,7 +65,7 @@ class DocumentVersion(Base):
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     document_id = Column(String, ForeignKey("documents.id"))
     revision_number = Column(Integer, nullable=False)
-    file_path = Column(String, nullable=False) # this is the path to the file in the storage
-    uploaded_by = Column(String, ForeignKey("users.id")) # this is the user id of the faculty who uploaded the document
+    file_path = Column(String, nullable=False)
+    change_note = Column(String, nullable=True)   # <-- ADD THIS LINE
+    uploaded_by = Column(String, ForeignKey("users.id"))
     uploaded_at = Column(DateTime, default=datetime.utcnow)
-
