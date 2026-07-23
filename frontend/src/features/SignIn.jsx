@@ -52,6 +52,19 @@ export default function SignIn() {
             Test as Faculty
           </button>
           <button
+            onClick={() =>
+              handleDevLogin(
+                "depthead123@test.com",
+                "department_head",
+                "CS_CAD"
+              )
+            }
+            disabled={loading}
+            className="w-full rounded-lg bg-indigo-50 px-4 py-2.5 text-sm font-semibold text-indigo-700 transition duration-200 hover:bg-indigo-100"
+          >
+            Test as Department Head
+          </button>
+          <button
             onClick={() => handleDevLogin("auditor123@test.com", "auditor", "ACT")}
             disabled={loading}
             className="w-full rounded-lg bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-700 transition duration-200 hover:bg-amber-100"

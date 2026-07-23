@@ -1,9 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-<<<<<<< HEAD:backend/main.py
-=======
-
->>>>>>> pulmano/beta:backend/app/main.py
 from app.core.database import engine, Base
 
 from app.features.departments.models import Department
@@ -25,22 +21,12 @@ from app.features.academic_years.router import router as academic_years_router
 Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Paper Trail 2.0 API")
 
-<<<<<<< HEAD:backend/main.py
-origins = [
-    "http://localhost:5173" # Default port for Vite frontend (change/add as needed)
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-=======
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
     ],
->>>>>>> pulmano/beta:backend/app/main.py
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

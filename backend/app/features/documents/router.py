@@ -66,7 +66,19 @@ def upload_syllabus(
     if not doc_type:
         raise HTTPException(status_code=400, detail="Submission window has no valid document type configured.")
 
-    now = datetime.utcnow()
+    print("========== Submission Window Debug ==========")
+    print("UTC Now:", datetime.utcnow())
+    print("UTC Now:", datetime.now())
+    print("Window Start:", window.start_date)
+    print("Window End:", window.end_date)
+    print("Window Active:", window.is_active)
+    print("AY:", ay.label)
+    print("Term:", term)
+    print("Window ID:", window.id)
+    print("============================================")
+
+    now = datetime.now()
+
     if not (window.start_date <= now <= window.end_date):
         raise HTTPException(
             status_code=400,
